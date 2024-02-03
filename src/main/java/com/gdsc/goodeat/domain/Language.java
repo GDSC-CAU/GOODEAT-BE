@@ -1,4 +1,4 @@
-package com.gdsc.goodeat;
+package com.gdsc.goodeat.domain;
 
 import com.gdsc.goodeat.exception.LanguageNotFoundException;
 import java.util.Arrays;
@@ -27,5 +27,13 @@ public enum Language {
         .filter(lan -> lan.ISO639Code.equals(code))
         .findAny()
         .orElseThrow(LanguageNotFoundException::new);
+  }
+
+  public String getLanguageName() {
+    return languageName;
+  }
+
+  public String getISO639Code() {
+    return ISO639Code;
   }
 }
