@@ -3,7 +3,6 @@ package com.gdsc.goodeat.domain;
 import static com.gdsc.goodeat.domain.Language.AFRIKAANS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.gdsc.goodeat.domain.Language;
 import org.junit.jupiter.api.Test;
 
 class LanguageTest {

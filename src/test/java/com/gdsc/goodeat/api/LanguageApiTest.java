@@ -1,12 +1,10 @@
 package com.gdsc.goodeat.api;
 
-import static com.gdsc.goodeat.domain.Language.AFRIKAANS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdsc.goodeat.domain.Language;
 import com.gdsc.goodeat.dto.LanguageResponse;
 import com.gdsc.goodeat.support.ApiTest;
-import com.jayway.jsonpath.TypeRef;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

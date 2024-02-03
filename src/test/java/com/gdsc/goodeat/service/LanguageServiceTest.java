@@ -3,7 +3,6 @@ package com.gdsc.goodeat.service;
 import static com.gdsc.goodeat.domain.Language.AFRIKAANS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.gdsc.goodeat.domain.Language;
 import com.gdsc.goodeat.dto.LanguageResponse;
 import com.gdsc.goodeat.support.ServiceTest;
 import java.util.List;
