@@ -29,6 +29,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    //google
+//    implementation platform("com.google.cloud:libraries-bom:25.1.0")
+//    implementation("com.google.cloud:google-cloud-translate")
+    implementation 'com.google.cloud:google-cloud-translate:2.34.0'
+
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured:5.3.0'
