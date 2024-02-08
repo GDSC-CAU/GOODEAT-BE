@@ -2,7 +2,10 @@ package com.gdsc.goodeat.external;
 
 import com.gdsc.goodeat.domain.Language;
 import com.gdsc.goodeat.domain.TranslationClient;
-import org.springframework.beans.factory.annotation.Value;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.Translate.TranslateOption;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -10,13 +13,18 @@ import org.springframework.stereotype.Component;
 @Profile("!test")
 public class GoogleTranslationClient implements TranslationClient {
 
-  public final String apiKey;
+  public final Translate translate;
 
-  public GoogleTranslationClient(@Value("${apikey.google}: not prod") final String apiKey) {
-    this.apiKey = apiKey;
+  public GoogleTranslationClient() {
+    translate = TranslateOptions.getDefaultInstance().getService();
   }
 
-  public String translate(final Language from, final Language to, final String content) {
-    return null;
+  public String translate(final Language source, final Language target, final String content) {
+    final Translation translation = translate.translate(
+        content
+        , TranslateOption.sourceLanguage(source.getISO639Code())
+        , TranslateOption.targetLanguage(target.getISO639Code())
+    );
+    return translation.getTranslatedText();
   }
 }
