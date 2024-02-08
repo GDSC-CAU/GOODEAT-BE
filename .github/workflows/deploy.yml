@@ -3,13 +3,19 @@ name: GOODEAT Backend Deploy to EC2
 on:
   workflow_dispatch:
 
-jobs:
+jobs: 
   deploy:
     runs-on: self-hosted
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'adopt-openj9'
 
     - name: Build and Package
       run: |
