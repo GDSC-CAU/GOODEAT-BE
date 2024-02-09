@@ -32,12 +32,11 @@ public class GoogleTranslationClient implements TranslationClient {
   }
 
   private Translate initTranslateIfProd(final String path) {
-    final Translate translate;
     try (final InputStream serviceStream = new ClassPathResource(path).getInputStream()) {
       final ServiceAccountCredentials credential = ServiceAccountCredentials
           .fromStream(serviceStream);
 
-      translate = TranslateOptions.newBuilder()
+      return TranslateOptions.newBuilder()
           .setCredentials(credential)
           .build()
           .getService();
@@ -45,7 +44,6 @@ public class GoogleTranslationClient implements TranslationClient {
     } catch (final IOException e) {
       throw new RuntimeException(e);
     }
-    return translate;
   }
 
   public String translate(final Language source, final Language target, final String content) {
