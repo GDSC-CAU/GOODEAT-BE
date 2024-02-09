@@ -1,7 +1,6 @@
 package com.gdsc.goodeat.dto;
 
 import java.util.List;
-import lombok.Getter;
 
 public record ScriptGenerateRequest(
     List<OrderRequest> orders,
