@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 public class LanguageApiTest extends ApiTest {
 
   @Test
-  void 언어_목록을_조회할_수_있다(){
+  void 언어_목록을_조회할_수_있다() {
     //given, when
     final ExtractableResponse<Response> response = RestAssured.given().log().all()
-        .when().get("/lagnuages")
+        .when().get("/language")
         .then().log().all()
         .extract();
 
