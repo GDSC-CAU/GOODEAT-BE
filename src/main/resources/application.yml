@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: local
+
+google:
+  credential:
+    path: google-cloud-credentials.json

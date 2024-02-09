@@ -17,7 +17,7 @@ public class LanguageController {
   }
 
   @GetMapping("/language")
-  public ResponseEntity<List<LanguageResponse>> getLanguages(){
+  public ResponseEntity<List<LanguageResponse>> getLanguages() {
     final List<LanguageResponse> languageResponses = languageService.findAllLanguages();
     return ResponseEntity.ok(languageResponses);
   }
