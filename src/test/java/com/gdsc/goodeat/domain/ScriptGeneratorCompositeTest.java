@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ScriptGeneratorOppositeTest {
+class ScriptGeneratorCompositeTest {
 
   @Autowired
-  private ScriptGeneratorOpposite scriptGeneratorOpposite;
+  private ScriptGeneratorComposite scriptGeneratorComposite;
 
   @Test
   void 언어와_스크립트를_입력하면_스크립트를_생성해준다() {
@@ -25,7 +25,7 @@ class ScriptGeneratorOppositeTest {
 
     //when
     final Script expected = new Script("Xin chào. Tôi muốn đặt 3 Bún Chả");
-    final Script actual = scriptGeneratorOpposite.genrateScript(VIETNAMESE, menuItems);
+    final Script actual = scriptGeneratorComposite.genrateScript(VIETNAMESE, menuItems);
 
     //then
     assertThat(actual)
@@ -38,7 +38,7 @@ class ScriptGeneratorOppositeTest {
     final Language unsupportedLanguage = Language.AFRIKAANS;
 
     assertThatThrownBy(
-        () -> scriptGeneratorOpposite.genrateScript(unsupportedLanguage, Collections.emptyList())
+        () -> scriptGeneratorComposite.genrateScript(unsupportedLanguage, Collections.emptyList())
     )
         .isInstanceOf(ScriptException.class)
         .hasMessage(SCRIPT_GENERATOR_NOT_FOUND.getExceptionMessage());
