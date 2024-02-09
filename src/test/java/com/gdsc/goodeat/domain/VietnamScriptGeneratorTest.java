@@ -31,7 +31,7 @@ class VietnamScriptGeneratorTest {
     final Script actual = vietnamScriptGenerator.generate(menuItems);
 
     assertThat(actual)
-        .usingRecursiveAssertion()
+        .usingRecursiveComparison()
         .isEqualTo(expected);
   }
 }
