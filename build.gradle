@@ -30,8 +30,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     //google
-//    implementation platform("com.google.cloud:libraries-bom:25.1.0")
-//    implementation("com.google.cloud:google-cloud-translate")
     implementation 'com.google.cloud:google-cloud-translate:2.34.0'
 
     //test
