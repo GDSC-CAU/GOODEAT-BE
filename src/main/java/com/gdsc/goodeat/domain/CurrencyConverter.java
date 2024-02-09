@@ -1,5 +1,9 @@
 package com.gdsc.goodeat.domain;
 
+import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_CRAWLING_FAILED;
+import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELEMENT_NOT_FOUND;
+
+import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,9 +27,7 @@ public class CurrencyConverter {
     try {
       return Jsoup.connect(url).get().html();
     } catch (IOException e) {
-      e.printStackTrace(); // 추후 수정
-      return null; // 추후 수정
-//      throw new CurrencyConversionException("Error while crawling HTML from " + url, e);
+      throw new CurrencyException(CURRENCY_RATE_CRAWLING_FAILED);
     }
   }
 
@@ -38,8 +40,7 @@ public class CurrencyConverter {
       String exchangeRateString = exchangeRateElement.text();
       return Double.parseDouble(exchangeRateString);
     } else {
-      return -1; // 추후 수정
-//      throw new CurrencyConversionException("Exchange rate not found in HTML");
+      throw new CurrencyException(CURRENCY_RATE_ELEMENT_NOT_FOUND);
     }
   }
 }
