@@ -22,7 +22,7 @@ public class GoogleTranslationClient implements TranslationClient {
 
   public GoogleTranslationClient(
       @Value("${google.credential.path:not prod}") final String path,
-      @Value("${spring.profile.active}") final String profile
+      @Value("${spring.profiles.active}") final String profile
   ) {
     if (profile.equals("prod")) {
       translate = initTranslateIfProd(path);
