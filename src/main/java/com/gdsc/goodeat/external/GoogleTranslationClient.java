@@ -22,7 +22,7 @@ public class GoogleTranslationClient implements TranslationClient {
 
   public GoogleTranslationClient(
       @Value("${google.credential.path:not prod}") final String path,
-      @Value("${spring.profile.active}") final String profile
+      @Value("${spring.profiles.active}") final String profile
   ) {
     if (profile.equals("prod")) {
       translate = initTranslateIfProd(path);
@@ -32,12 +32,11 @@ public class GoogleTranslationClient implements TranslationClient {
   }
 
   private Translate initTranslateIfProd(final String path) {
-    final Translate translate;
     try (final InputStream serviceStream = new ClassPathResource(path).getInputStream()) {
       final ServiceAccountCredentials credential = ServiceAccountCredentials
           .fromStream(serviceStream);
 
-      translate = TranslateOptions.newBuilder()
+      return TranslateOptions.newBuilder()
           .setCredentials(credential)
           .build()
           .getService();
@@ -45,7 +44,6 @@ public class GoogleTranslationClient implements TranslationClient {
     } catch (final IOException e) {
       throw new RuntimeException(e);
     }
-    return translate;
   }
 
   public String translate(final Language source, final Language target, final String content) {

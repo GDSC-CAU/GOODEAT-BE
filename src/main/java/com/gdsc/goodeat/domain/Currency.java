@@ -1,6 +1,8 @@
 package com.gdsc.goodeat.domain;
 
-import com.gdsc.goodeat.exception.CurrencyNotFoundException;
+import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_NOT_FOUND;
+
+import com.gdsc.goodeat.exception.CurrencyException;
 import java.util.Arrays;
 
 public enum Currency {
@@ -163,14 +165,14 @@ public enum Currency {
     return Arrays.stream(values())
         .filter(lan -> lan.currencyName.equals(currencyName))
         .findAny()
-        .orElseThrow(CurrencyNotFoundException::new);
+        .orElseThrow(() -> new CurrencyException(CURRENCY_NOT_FOUND));
   }
 
   public static Currency fromISO4217Code(final String code) {
     return Arrays.stream(values())
         .filter(lan -> lan.ISO4217Code.equals(code))
         .findAny()
-        .orElseThrow(CurrencyNotFoundException::new);
+        .orElseThrow(() -> new CurrencyException(CURRENCY_NOT_FOUND));
   }
 
   public String getCurrencyName() {
