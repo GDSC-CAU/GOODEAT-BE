@@ -1,18 +1,21 @@
 package com.gdsc.goodeat.dto;
 
+import com.gdsc.goodeat.domain.MenuItem;
 import java.util.List;
 
 public record ScriptGenerateRequest(
-    List<OrderRequest> orders,
+    List<MenuItemRequest> menuItems,
     String travelLanguageName,
     String userLanguageName
 ) {
 
-  public record OrderRequest(
+  public record MenuItemRequest(
       String travelMenuName,
       String userMenuName,
-      int count
+      int quantity
   ) {
-
+    public MenuItem toDomain() {
+      return new MenuItem(travelMenuName, userMenuName, quantity);
+    }
   }
 }

@@ -1,9 +1,10 @@
 package com.gdsc.goodeat.api;
 
+import static com.gdsc.goodeat.domain.FakeTranslationClient.TRANSLATION_POST_FIX;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdsc.goodeat.dto.ScriptGenerateRequest;
-import com.gdsc.goodeat.dto.ScriptGenerateRequest.OrderRequest;
+import com.gdsc.goodeat.dto.ScriptGenerateRequest.MenuItemRequest;
 import com.gdsc.goodeat.dto.ScriptResponse;
 import com.gdsc.goodeat.support.ApiTest;
 import io.restassured.RestAssured;
@@ -20,9 +21,9 @@ public class ScriptApiTest extends ApiTest {
     //given
     final ScriptGenerateRequest request = new ScriptGenerateRequest(
         List.of(
-            new OrderRequest("Bún Chả", "분짜", 3)
+            new MenuItemRequest("Bún Chả", "분짜", 3)
         ),
-        "ki", "vi"
+        "Vietnamese", "Korean"
     );
 
     //when
@@ -35,13 +36,13 @@ public class ScriptApiTest extends ApiTest {
 
     //then
     final ScriptResponse expected = new ScriptResponse(
-        "안녕하세요. 분짜 3개를 주문하겠습니다.",
-        "Xin chào. Tôi sẽ gọi 3 Bún Chả."
+        "Xin chào. Tôi muốn đặt 3 Bún Chả"+TRANSLATION_POST_FIX,
+        "Xin chào. Tôi muốn đặt 3 Bún Chả"
     );
     final ScriptResponse actual = response.as(ScriptResponse.class);
 
     assertThat(actual)
-        .usingRecursiveAssertion()
+        .usingRecursiveComparison()
         .isEqualTo(expected);
   }
 }
