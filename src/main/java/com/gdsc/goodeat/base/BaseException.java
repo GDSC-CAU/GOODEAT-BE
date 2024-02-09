@@ -2,9 +2,14 @@ package com.gdsc.goodeat.base;
 
 public abstract class BaseException extends RuntimeException {
 
-  protected BaseException(final String message) {
-    super(message);
+  private final BaseExceptionType baseExceptionType;
+
+  protected BaseException(final BaseExceptionType exceptionType) {
+    super(exceptionType.getExceptionMessage());
+    baseExceptionType = exceptionType;
   }
 
-  public abstract BaseExceptionType exceptionType();
+  public BaseExceptionType exceptionType(){
+    return baseExceptionType;
+  }
 }
