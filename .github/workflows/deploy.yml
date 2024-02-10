@@ -1,0 +1,40 @@
+name: GOODEAT Backend Deploy to EC2
+
+on:
+  workflow_dispatch:
+
+jobs: 
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'adopt-openj9'
+
+    - name: Build and Package
+      run: |
+        mkdir ~/artifacts
+        ./gradlew clean build
+        mv build/libs/goodeat-0.0.1-SNAPSHOT.jar ~/artifacts/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: deployment-package
+        path: ~/artifacts
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        port: 22
+        script: |
+          ./deploy.sh
