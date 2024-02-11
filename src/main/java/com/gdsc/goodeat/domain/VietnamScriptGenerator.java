@@ -17,7 +17,7 @@ public class VietnamScriptGenerator implements ScriptGenerator {
   public Script generate(final List<MenuItem> menuItems) {
     final String menuItemScript = menuItems.stream()
         .map(menuItem -> String.format(MENU_ITEM_TEMPLATE, menuItem.quantity(),
-            menuItem.travelMenuName()))
+            menuItem.originMenuName()))
         .collect(Collectors.joining(MENU_ITEM_DELIMITER));
     final String script = String.format(SCRIPT_TEMPLATE, menuItemScript);
 

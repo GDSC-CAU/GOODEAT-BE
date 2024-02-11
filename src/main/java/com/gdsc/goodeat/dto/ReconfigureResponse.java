@@ -3,16 +3,10 @@ package com.gdsc.goodeat.dto;
 public record ReconfigureResponse(
     String description,
     String imageUrl,
-    String travelMenuName,
+    String originMenuName,
     String userMenuName,
-    CurrencyResponse travelUnit,
-    CurrencyResponse userUnit
+    Double originPrice,
+    Double userPrice
 ) {
 
-  public record CurrencyResponse(
-      String currencyName,
-      int amount
-  ) {
-
-  }
 }
