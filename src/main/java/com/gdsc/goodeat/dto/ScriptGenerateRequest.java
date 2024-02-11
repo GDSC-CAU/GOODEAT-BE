@@ -5,17 +5,17 @@ import java.util.List;
 
 public record ScriptGenerateRequest(
     List<MenuItemRequest> menuItems,
-    String travelLanguageName,
+    String originLanguageName,
     String userLanguageName
 ) {
 
   public record MenuItemRequest(
-      String travelMenuName,
+      String originMenuName,
       String userMenuName,
       int quantity
   ) {
     public MenuItem toDomain() {
-      return new MenuItem(travelMenuName, userMenuName, quantity);
+      return new MenuItem(originMenuName, userMenuName, quantity);
     }
   }
 }

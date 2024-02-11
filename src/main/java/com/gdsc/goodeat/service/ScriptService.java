@@ -20,7 +20,7 @@ public class ScriptService {
   private final TranslationClient translationClient;
 
   public ScriptResponse generateScript(final ScriptGenerateRequest request) {
-    final Language sourceLanguage = Language.fromLanguageName(request.travelLanguageName());
+    final Language sourceLanguage = Language.fromLanguageName(request.originLanguageName());
     final Language targetLanguage = Language.fromLanguageName(request.userLanguageName());
 
     final List<MenuItem> menuItems = request.menuItems()
