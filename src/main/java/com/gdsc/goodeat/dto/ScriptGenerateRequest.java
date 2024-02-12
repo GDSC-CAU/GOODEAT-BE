@@ -1,6 +1,6 @@
 package com.gdsc.goodeat.dto;
 
-import com.gdsc.goodeat.domain.MenuItem;
+import com.gdsc.goodeat.domain.OrderItem;
 import java.util.List;
 
 public record ScriptGenerateRequest(
@@ -14,8 +14,8 @@ public record ScriptGenerateRequest(
       String userMenuName,
       int quantity
   ) {
-    public MenuItem toDomain() {
-      return new MenuItem(originMenuName, userMenuName, quantity);
+    public OrderItem toDomain() {
+      return new OrderItem(originMenuName, userMenuName, quantity);
     }
   }
 }

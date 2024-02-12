@@ -20,11 +20,11 @@ public class ScriptGeneratorComposite {
         .collect(Collectors.toMap(ScriptGenerator::supportedLanguage, Function.identity()));
   }
 
-  public Script genrateScript(final Language language, final List<MenuItem> menuItems) {
+  public Script genrateScript(final Language language, final List<OrderItem> orderItems) {
     final Optional<ScriptGenerator> scriptGenerator = Optional.ofNullable(scriptGeneratorMap.get(language));
 
     return scriptGenerator
-        .map(generator -> generator.generate(menuItems))
+        .map(generator -> generator.generate(orderItems))
         .orElseThrow(() -> new ScriptException(SCRIPT_GENERATOR_NOT_FOUND));
   }
 }

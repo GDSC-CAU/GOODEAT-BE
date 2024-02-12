@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ScriptGenerator {
 
-  Script generate(final List<MenuItem> menuItems);
+  Script generate(final List<OrderItem> orderItems);
 
   Language supportedLanguage();
 }

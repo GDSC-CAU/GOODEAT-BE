@@ -21,14 +21,14 @@ class VietnamScriptGeneratorTest {
   @Test
   void 메뉴_아이템을_받으면_스크립트를_반환한다() {
     //given
-    final List<MenuItem> menuItems = List.of(
-        new MenuItem("Bún Chả", "분짜", 3),
-        new MenuItem("Pho", "쌀국수", 2)
+    final List<OrderItem> orderItems = List.of(
+        new OrderItem("Bún Chả", "분짜", 3),
+        new OrderItem("Pho", "쌀국수", 2)
     );
 
     //when
     final Script expected = new Script("Xin chào. Tôi muốn đặt 3 Bún Chả và 2 Pho");
-    final Script actual = vietnamScriptGenerator.generate(menuItems);
+    final Script actual = vietnamScriptGenerator.generate(orderItems);
 
     assertThat(actual)
         .usingRecursiveComparison()

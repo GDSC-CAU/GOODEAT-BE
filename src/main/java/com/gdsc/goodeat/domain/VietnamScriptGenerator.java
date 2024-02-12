@@ -14,8 +14,8 @@ public class VietnamScriptGenerator implements ScriptGenerator {
   private static final String MENU_ITEM_TEMPLATE = "%d %s";
 
   @Override
-  public Script generate(final List<MenuItem> menuItems) {
-    final String menuItemScript = menuItems.stream()
+  public Script generate(final List<OrderItem> orderItems) {
+    final String menuItemScript = orderItems.stream()
         .map(menuItem -> String.format(MENU_ITEM_TEMPLATE, menuItem.quantity(),
             menuItem.originMenuName()))
         .collect(Collectors.joining(MENU_ITEM_DELIMITER));
