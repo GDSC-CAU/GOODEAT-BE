@@ -1,6 +1,6 @@
 package com.gdsc.goodeat.domain;
 
-import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_CRAWLING_FAILED;
+import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELEMENT_NOT_FOUND;
 
 import com.gdsc.goodeat.exception.CurrencyException;
@@ -13,7 +13,7 @@ public class CurrencyConverter {
 
   public double convert(double amount, String from, String to) {
     String url = buildUrl(from, to);
-    String html = crawlHtml(url);
+    String html = scrapHtml(url);
     double exchangeRate = extractExchangeRate(html);
 
     return amount * exchangeRate;
@@ -23,11 +23,11 @@ public class CurrencyConverter {
     return "https://www.google.com/finance/quote/" + from + "-" + to;
   }
 
-  public String crawlHtml(String url) {
+  public String scrapHtml(String url) {
     try {
       return Jsoup.connect(url).get().html();
     } catch (IOException e) {
-      throw new CurrencyException(CURRENCY_RATE_CRAWLING_FAILED);
+      throw new CurrencyException(CURRENCY_RATE_SCRAPING_FAILED);
     }
   }
 
