@@ -1,7 +1,7 @@
 package com.gdsc.goodeat.service;
 
 import com.gdsc.goodeat.domain.Language;
-import com.gdsc.goodeat.domain.MenuItem;
+import com.gdsc.goodeat.domain.OrderItem;
 import com.gdsc.goodeat.domain.Script;
 import com.gdsc.goodeat.domain.ScriptGeneratorComposite;
 import com.gdsc.goodeat.domain.TranslationClient;
@@ -23,12 +23,12 @@ public class ScriptService {
     final Language sourceLanguage = Language.fromLanguageName(request.originLanguageName());
     final Language targetLanguage = Language.fromLanguageName(request.userLanguageName());
 
-    final List<MenuItem> menuItems = request.menuItems()
+    final List<OrderItem> orderItems = request.menuItems()
         .stream()
         .map(MenuItemRequest::toDomain)
         .toList();
 
-    final Script travleScript = scriptGeneratorComposite.genrateScript(sourceLanguage, menuItems);
+    final Script travleScript = scriptGeneratorComposite.genrateScript(sourceLanguage, orderItems);
     final String userScript = translationClient
         .translate(sourceLanguage, targetLanguage, travleScript.script());
 

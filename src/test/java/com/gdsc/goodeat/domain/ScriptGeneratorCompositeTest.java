@@ -21,11 +21,11 @@ class ScriptGeneratorCompositeTest {
   @Test
   void 언어와_스크립트를_입력하면_스크립트를_생성해준다() {
     //given
-    final List<MenuItem> menuItems = List.of(new MenuItem("Bún Chả", "분짜", 3));
+    final List<OrderItem> orderItems = List.of(new OrderItem("Bún Chả", "분짜", 3));
 
     //when
     final Script expected = new Script("Xin chào. Tôi muốn đặt 3 Bún Chả");
-    final Script actual = scriptGeneratorComposite.genrateScript(VIETNAMESE, menuItems);
+    final Script actual = scriptGeneratorComposite.genrateScript(VIETNAMESE, orderItems);
 
     //then
     assertThat(actual)
