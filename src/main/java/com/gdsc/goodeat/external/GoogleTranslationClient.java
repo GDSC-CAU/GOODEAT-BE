@@ -24,7 +24,7 @@ public class GoogleTranslationClient implements TranslationClient {
       @Value("${google.credential.path:not prod}") final String path,
       @Value("${spring.profiles.active}") final String profile
   ) {
-    if (profile.equals("prod")) {
+    if (profile.equals("local")) {
       translate = initTranslateIfProd(path);
     } else {
       translate = new EmptyTranslate();
