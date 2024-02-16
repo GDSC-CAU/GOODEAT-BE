@@ -13,32 +13,31 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class CurrencyConverter {
+  private static final String GOOGLE_FINANCE_URL = "https://www.google.com/finance/quote/";
 
-  public List<ReconfigureResponse> convert(List<ReconfigureResponse> origin, String from, String to) {
+  public List<ReconfigureResponse> convert(List<ReconfigureResponse> originData, String from, String to) {
     String url = buildUrl(from, to);
     String html = scrapHtml(url);
     Double exchangeRate = extractExchangeRate(html);
 
-    List<ReconfigureResponse> converted = new ArrayList<>();
+    List<ReconfigureResponse> convertedData = new ArrayList<>();
 
-    for(int i=0; i < origin.size(); i++) {
-      ReconfigureResponse rec = origin.get(i);
-      ReconfigureResponse response = new ReconfigureResponse(
-          rec.description(),
-          rec.imageUrl(),
-          rec.originMenuName(),
-          rec.userMenuName(),
-          rec.originPrice(),
-          rec.originPrice() * exchangeRate
-      );
-      converted.add(response);
+    for (ReconfigureResponse x : originData) {
+      convertedData.add(new ReconfigureResponse(
+          x.description(),
+          x.imageUrl(),
+          x.originMenuName(),
+          x.userMenuName(),
+          x.originPrice(),
+          x.originPrice() * exchangeRate
+      ));
     }
 
-    return converted;
+    return convertedData;
   }
 
   private String buildUrl(String from, String to) {
-    return "https://www.google.com/finance/quote/" + from + "-" + to;
+    return GOOGLE_FINANCE_URL + from + "-" + to;
   }
 
   public String scrapHtml(String url) {
@@ -53,7 +52,6 @@ public class CurrencyConverter {
     Document doc = Jsoup.parse(html);
     Element exchangeRateElement = doc.selectFirst("div[class=YMlKec fxKbKc]");
 
-    System.out.println(exchangeRateElement);
     if (exchangeRateElement != null) {
       String exchangeRateString = exchangeRateElement.text();
       return Double.parseDouble(exchangeRateString);
