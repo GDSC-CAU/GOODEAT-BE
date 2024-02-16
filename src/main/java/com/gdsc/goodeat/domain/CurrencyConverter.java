@@ -3,7 +3,6 @@ package com.gdsc.goodeat.domain;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELEMENT_NOT_FOUND;
 
-import com.gdsc.goodeat.dto.ReconfigureResponse;
 import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,25 +14,18 @@ import org.jsoup.nodes.Element;
 public class CurrencyConverter {
   private static final String GOOGLE_FINANCE_URL = "https://www.google.com/finance/quote/";
 
-  public List<ReconfigureResponse> convert(List<ReconfigureResponse> originData, String from, String to) {
+  public List<Double> convert(List<Double> originPriceList, String from, String to) {
     String url = buildUrl(from, to);
     String html = scrapHtml(url);
     Double exchangeRate = extractExchangeRate(html);
 
-    List<ReconfigureResponse> convertedData = new ArrayList<>();
+    List<Double> userPriceList = new ArrayList<>();
 
-    for (ReconfigureResponse x : originData) {
-      convertedData.add(new ReconfigureResponse(
-          x.description(),
-          x.imageUrl(),
-          x.originMenuName(),
-          x.userMenuName(),
-          x.originPrice(),
-          x.originPrice() * exchangeRate
-      ));
+    for (Double originPrice : originPriceList) {
+      userPriceList.add(originPrice * exchangeRate);
     }
 
-    return convertedData;
+    return userPriceList;
   }
 
   private String buildUrl(String from, String to) {
