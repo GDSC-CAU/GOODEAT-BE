@@ -3,20 +3,38 @@ package com.gdsc.goodeat.domain;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELEMENT_NOT_FOUND;
 
+import com.gdsc.goodeat.dto.ReconfigureResponse;
 import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class CurrencyConverter {
 
-  public double convert(double amount, String from, String to) {
+  public List<ReconfigureResponse> convert(List<ReconfigureResponse> origin, String from, String to) {
     String url = buildUrl(from, to);
     String html = scrapHtml(url);
-    double exchangeRate = extractExchangeRate(html);
+    Double exchangeRate = extractExchangeRate(html);
 
-    return amount * exchangeRate;
+    List<ReconfigureResponse> converted = new ArrayList<>();
+
+    for(int i=0; i < origin.size(); i++) {
+      ReconfigureResponse rec = origin.get(i);
+      ReconfigureResponse response = new ReconfigureResponse(
+          rec.description(),
+          rec.imageUrl(),
+          rec.originMenuName(),
+          rec.userMenuName(),
+          rec.originPrice(),
+          rec.originPrice() * exchangeRate
+      );
+      converted.add(response);
+    }
+
+    return converted;
   }
 
   private String buildUrl(String from, String to) {
@@ -31,7 +49,7 @@ public class CurrencyConverter {
     }
   }
 
-  private double extractExchangeRate(String html) {
+  private Double extractExchangeRate(String html) {
     Document doc = Jsoup.parse(html);
     Element exchangeRateElement = doc.selectFirst("div[class=YMlKec fxKbKc]");
 
