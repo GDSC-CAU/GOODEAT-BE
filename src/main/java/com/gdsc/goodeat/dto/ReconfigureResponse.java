@@ -4,9 +4,11 @@ import com.gdsc.goodeat.domain.FoodScraper.FoodInfo;
 import com.gdsc.goodeat.domain.MenuItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
 @Getter
+@ToString
 public class ReconfigureResponse {
 
   private final String description;

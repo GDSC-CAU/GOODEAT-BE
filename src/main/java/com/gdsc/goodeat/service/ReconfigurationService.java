@@ -78,8 +78,7 @@ public class ReconfigurationService {
         .map(MenuItem::price)
         .map(Price::amount)
         .toList();
-    return currencyConverter
-        .convert(prices, originCurrency.getCurrencyName(), userCurrency.getCurrencyName());
+    return currencyConverter.convert(prices, originCurrency, userCurrency);
   }
 
   private List<FoodInfo> createFoodInfos(
