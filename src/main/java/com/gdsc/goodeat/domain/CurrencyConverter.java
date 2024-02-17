@@ -1,7 +1,7 @@
 package com.gdsc.goodeat.domain;
 
-import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELEMENT_NOT_FOUND;
+import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 
 import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
@@ -10,8 +10,11 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CurrencyConverter {
+
   private static final String GOOGLE_FINANCE_URL = "https://www.google.com/finance/quote/";
 
   public List<Double> convert(List<Double> originPriceList, String from, String to) {
