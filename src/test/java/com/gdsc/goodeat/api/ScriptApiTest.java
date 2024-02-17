@@ -1,6 +1,6 @@
 package com.gdsc.goodeat.api;
 
-import static com.gdsc.goodeat.domain.FakeTranslationClient.TRANSLATION_POST_FIX;
+import static com.gdsc.goodeat.fake.FakeTranslationClient.TRANSLATION_POST_FIX;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdsc.goodeat.dto.ScriptGenerateRequest;
