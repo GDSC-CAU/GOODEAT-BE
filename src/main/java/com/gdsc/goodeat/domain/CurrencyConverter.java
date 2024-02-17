@@ -5,22 +5,31 @@ import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELE
 
 import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class CurrencyConverter {
+  private static final String GOOGLE_FINANCE_URL = "https://www.google.com/finance/quote/";
 
-  public double convert(double amount, String from, String to) {
+  public List<Double> convert(List<Double> originPriceList, String from, String to) {
     String url = buildUrl(from, to);
     String html = scrapHtml(url);
-    double exchangeRate = extractExchangeRate(html);
+    Double exchangeRate = extractExchangeRate(html);
 
-    return amount * exchangeRate;
+    List<Double> userPriceList = new ArrayList<>();
+
+    for (Double originPrice : originPriceList) {
+      userPriceList.add(originPrice * exchangeRate);
+    }
+
+    return userPriceList;
   }
 
   private String buildUrl(String from, String to) {
-    return "https://www.google.com/finance/quote/" + from + "-" + to;
+    return GOOGLE_FINANCE_URL + from + "-" + to;
   }
 
   public String scrapHtml(String url) {
@@ -31,11 +40,10 @@ public class CurrencyConverter {
     }
   }
 
-  private double extractExchangeRate(String html) {
+  private Double extractExchangeRate(String html) {
     Document doc = Jsoup.parse(html);
     Element exchangeRateElement = doc.selectFirst("div[class=YMlKec fxKbKc]");
 
-    System.out.println(exchangeRateElement);
     if (exchangeRateElement != null) {
       String exchangeRateString = exchangeRateElement.text();
       return Double.parseDouble(exchangeRateString);
