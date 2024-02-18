@@ -28,8 +28,7 @@ public class ReconfigureResponse {
   ) {
     return new ReconfigureResponse(
         foodInfo.getDescription(),
-        //TODO: preview ImageUrl로 변경해야함
-        foodInfo.getImage(),
+        foodInfo.getPreviewImage(),
         foodInfo.getImage(),
         menuItem.name(),
         userMenuName,
