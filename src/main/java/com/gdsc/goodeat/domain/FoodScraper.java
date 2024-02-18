@@ -14,7 +14,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,7 +31,9 @@ public class FoodScraper {
   private final WebDriver driver;
 
   public FoodScraper() {
-    this.driver = new ChromeDriver();
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--headless");
+    this.driver = new ChromeDriver(options);
   }
 
   public List<FoodInfo> scrape(final List<String> foodList) {
