@@ -40,6 +40,7 @@ public class FoodScraper {
     List<FoodInfo> foodInfoList = new ArrayList<>();
 
     for (String foodName : foodList) {
+      FoodInfo foodInfo;
       try {
         driver.get(TASTEATLAS_URL);
 
@@ -51,17 +52,22 @@ public class FoodScraper {
 
         // get search result & enter page
         WebElement searchResult = getSearchResult();
+        System.out.println(searchResult.getAttribute("src").replace("?mw=150", ""));
+        String preview = searchResult.getAttribute("src").replace("?mw=150", "");
         searchResult.click();
         driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
 
         // extract info
-        foodInfoList.add(extractFoodInfo());
+        foodInfo = extractFoodInfo();
+        foodInfo.setPreviewImage(preview);
       } catch (FoodException e) {
-        foodInfoList.add(new FoodInfo(FOOD_IMG_NOT_FOUND_URL, ""));
+        foodInfo = new FoodInfo(FOOD_IMG_NOT_FOUND_URL, FOOD_IMG_NOT_FOUND_URL, "");
       } catch (NoSuchElementException e) {
         driver.quit();
         throw new FoodException(FOOD_SCRAPING_FAILED);
       }
+
+      foodInfoList.add(foodInfo);
     }
 
     driver.quit();
@@ -81,7 +87,7 @@ public class FoodScraper {
     FoodInfo foodInfo = new FoodInfo();
 
     try {
-      foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src"));
+      foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src").replace("?mw=1300", ""));
     } catch (NoSuchElementException e) {
       foodInfo.setImage(FOOD_IMG_NOT_FOUND_URL);
     }
@@ -101,6 +107,7 @@ public class FoodScraper {
   public static class FoodInfo {
 
     private String image;
+    private String previewImage;
     private String description;
 
     public FoodInfo() {
