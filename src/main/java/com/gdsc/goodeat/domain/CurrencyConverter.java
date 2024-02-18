@@ -22,7 +22,7 @@ public class CurrencyConverter {
     List<Double> userPriceList = new ArrayList<>();
 
     for (Double originPrice : originPriceList) {
-      userPriceList.add(originPrice * exchangeRate);
+      userPriceList.add(Double.valueOf(String.format("%.2f", originPrice * exchangeRate)));
     }
 
     return userPriceList;
@@ -46,7 +46,7 @@ public class CurrencyConverter {
 
     if (exchangeRateElement != null) {
       String exchangeRateString = exchangeRateElement.text();
-      return Double.parseDouble(exchangeRateString);
+      return Double.parseDouble(exchangeRateString.replace(",",""));
     } else {
       throw new CurrencyException(CURRENCY_RATE_ELEMENT_NOT_FOUND);
     }
