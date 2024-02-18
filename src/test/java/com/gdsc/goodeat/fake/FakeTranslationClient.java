@@ -1,5 +1,7 @@
-package com.gdsc.goodeat.domain;
+package com.gdsc.goodeat.fake;
 
+import com.gdsc.goodeat.domain.Language;
+import com.gdsc.goodeat.domain.TranslationClient;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
