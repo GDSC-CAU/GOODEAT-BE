@@ -14,10 +14,12 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FoodScraper {
+
   private static final String TASTEATLAS_URL = "https://www.tasteatlas.com/";
   private static final String FOOD_IMG_NOT_FOUND_URL = "https://storage.googleapis.com/goodeat/food_image_not_found.jpg";
   private static final Duration DEFAULT_IMPLICIT_WAIT_DURATION = Duration.ofSeconds(5);
@@ -28,12 +30,13 @@ public class FoodScraper {
 
   private final WebDriver driver;
 
-
   public FoodScraper() {
-    this.driver = new ChromeDriver();
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--headless");
+    this.driver = new ChromeDriver(options);
   }
 
-  public List<FoodInfo> scrape(List<String> foodList) {
+  public List<FoodInfo> scrape(final List<String> foodList) {
     List<FoodInfo> foodInfoList = new ArrayList<>();
 
     for (String foodName : foodList) {
@@ -96,6 +99,7 @@ public class FoodScraper {
   @Data
   @AllArgsConstructor
   public static class FoodInfo {
+
     private String image;
     private String description;
 
