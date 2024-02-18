@@ -2,6 +2,7 @@ package com.gdsc.goodeat.service;
 
 import com.gdsc.goodeat.domain.Currency;
 import com.gdsc.goodeat.domain.CurrencyConverter;
+import com.gdsc.goodeat.domain.CurrencyConverter.PriceInfo;
 import com.gdsc.goodeat.domain.FoodScraper;
 import com.gdsc.goodeat.domain.FoodScraper.FoodInfo;
 import com.gdsc.goodeat.domain.Language;
@@ -42,7 +43,7 @@ public class ReconfigurationService {
     //음식 정보 크롤링 : 조회 후 설명 번역
     final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage);
     //환율 계산
-    final List<Double> convertedPrices = convertCurrency(menuItems, originCurrency, userCurrency);
+    final List<PriceInfo> convertedPrices = convertCurrency(menuItems, originCurrency, userCurrency);
     //음식 이름 번역
     final List<String> translatedMenuNames = translatedMenuName(
         menuItems, originLanguage, userLanguage
@@ -55,7 +56,7 @@ public class ReconfigurationService {
           foodInfos.get(i),
           menuItems.get(i),
           translatedMenuNames.get(i),
-          convertedPrices.get(i)
+          convertedPrices.get(i).getOriginPrice()
       );
       responses.add(response);
     }
@@ -71,14 +72,14 @@ public class ReconfigurationService {
         .toList();
   }
 
-  private List<Double> convertCurrency(
+  private List<PriceInfo> convertCurrency(
       final List<MenuItem> menuItems, final Currency originCurrency, final Currency userCurrency
   ) {
     final List<Double> prices = menuItems.stream()
         .map(MenuItem::price)
         .map(Price::amount)
         .toList();
-    return currencyConverter.convert(prices, originCurrency, userCurrency);
+    return currencyConverter.convert(prices, originCurrency.getISO4217Code(), userCurrency.getISO4217Code());
   }
 
   private List<FoodInfo> createFoodInfos(
