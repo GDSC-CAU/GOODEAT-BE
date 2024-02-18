@@ -22,12 +22,12 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: selenium을 위한 드라이버 설치
+      - name: selenium을 위한 chrome 드라이버 설치
         run: |
-          wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          chmod +x chromedriver
-          mv chromedriver /usr/local/bin/
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+          sudo apt-get update
+          sudo apt-get install google-chrome-stable
 
       - name: Give permission for Gradle
         run: chmod +x gradlew
