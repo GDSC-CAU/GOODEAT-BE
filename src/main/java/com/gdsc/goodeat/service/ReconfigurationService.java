@@ -91,6 +91,7 @@ public class ReconfigurationService {
     return foodScraper.scrape(menuItemNames).stream()
         .map(foodInfo -> new FoodInfo(
             foodInfo.getImage(),
+            foodInfo.getPreviewImage(),
             translationClient.translate(Language.ENGLISH, userLanguage, foodInfo.getDescription())
         )).toList();
   }
