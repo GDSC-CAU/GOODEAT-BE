@@ -56,7 +56,7 @@ public class ReconfigurationService {
           foodInfos.get(i),
           menuItems.get(i),
           translatedMenuNames.get(i),
-          convertedPrices.get(i).getOriginPrice()
+          convertedPrices.get(i)
       );
       responses.add(response);
     }

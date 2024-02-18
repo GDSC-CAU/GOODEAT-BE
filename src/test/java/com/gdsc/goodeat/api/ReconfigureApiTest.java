@@ -40,8 +40,8 @@ public class ReconfigureApiTest extends ApiTest {
         = Arrays.asList(response.as(ReconfigureResponse[].class));
     final List<ReconfigureResponse> expected = List.of(
         new ReconfigureResponse(
-            "음식에 대한 설명", "음식 이미지URL", "", ""
-            , 36000.0, 2000.0
+            "음식에 대한 설명", "음식 이미지 preview URL", "음식 이미지URL", "", ""
+            , 36000.0, "36000 VND", 2000.0, "₩ 2000.0"
         )
     );
 
