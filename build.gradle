@@ -38,7 +38,7 @@ dependencies {
 
     //crawling
     implementation 'org.jsoup:jsoup:1.16.1'
-    implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.14.1'
 }
 
 tasks.named('test') {
