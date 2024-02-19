@@ -13,8 +13,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,15 +28,9 @@ public class FoodScraper {
   private static final String IMAGE_SELECTOR = "img.img";
   private static final String DESCRIPTION_SELECTOR = "div.read-more--hidden.ng-scope";
 
-  private final WebDriver driver;
-
-  public FoodScraper() {
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("--headless");
-    this.driver = new ChromeDriver(options);
-  }
-
   public List<FoodInfo> scrape(final List<String> foodList) {
+    final WebDriver driver = gerateWebDriver();
+
     List<FoodInfo> foodInfoList = new ArrayList<>();
 
     for (String foodName : foodList) {
@@ -51,14 +45,14 @@ public class FoodScraper {
         driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
 
         // get search result & enter page
-        WebElement searchResult = getSearchResult();
+        WebElement searchResult = getSearchResult(driver);
         System.out.println(searchResult.getAttribute("src").replace("?mw=150", ""));
         String preview = searchResult.getAttribute("src").replace("?mw=150", "");
         searchResult.click();
         driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
 
         // extract info
-        foodInfo = extractFoodInfo();
+        foodInfo = extractFoodInfo(driver);
         foodInfo.setPreviewImage(preview);
       } catch (FoodException e) {
         foodInfo = new FoodInfo(FOOD_IMG_NOT_FOUND_URL, FOOD_IMG_NOT_FOUND_URL, "");
@@ -75,7 +69,13 @@ public class FoodScraper {
     return foodInfoList;
   }
 
-  private WebElement getSearchResult() {
+  private static WebDriver gerateWebDriver() {
+    final FirefoxOptions options = new FirefoxOptions();
+    options.addArguments("--headless");
+    return new FirefoxDriver(options);
+  }
+
+  private WebElement getSearchResult(final WebDriver driver) {
     try {
       return driver.findElement(By.cssSelector(FIRST_RESULT_SELECTOR));
     } catch (NoSuchElementException e) {
@@ -83,11 +83,12 @@ public class FoodScraper {
     }
   }
 
-  private FoodInfo extractFoodInfo() {
+  private FoodInfo extractFoodInfo(final WebDriver driver) {
     FoodInfo foodInfo = new FoodInfo();
 
     try {
-      foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src").replace("?mw=1300", ""));
+      foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src")
+          .replace("?mw=1300", ""));
     } catch (NoSuchElementException e) {
       foodInfo.setImage(FOOD_IMG_NOT_FOUND_URL);
     }
