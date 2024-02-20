@@ -47,6 +47,9 @@ public class GoogleTranslationClient implements TranslationClient {
   }
 
   public String translate(final Language source, final Language target, final String content) {
+    if (source == target) {
+      return content;
+    }
     final Translation translation = translate.translate(
         content
         , TranslateOption.sourceLanguage(source.getISO639Code())

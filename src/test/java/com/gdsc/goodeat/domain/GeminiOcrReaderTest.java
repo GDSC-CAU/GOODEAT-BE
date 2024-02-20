@@ -15,6 +15,7 @@ class GeminiOcrReaderTest {
 
   @Test
   @Disabled
+  //요청마다 GeminiOcr을 쓰기때문에 테스트 제외
   void OCR로_읽은_메뉴를_객체로_변환해준다() throws IOException {
     //given`
     final GeminiOcrReader geminiOcrReader = new GeminiOcrReader(

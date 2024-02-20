@@ -3,8 +3,8 @@ package com.gdsc.goodeat.service;
 import com.gdsc.goodeat.domain.Currency;
 import com.gdsc.goodeat.domain.CurrencyConverter;
 import com.gdsc.goodeat.domain.CurrencyConverter.PriceInfo;
-import com.gdsc.goodeat.domain.FoodScraper;
-import com.gdsc.goodeat.domain.FoodScraper.FoodInfo;
+import com.gdsc.goodeat.domain.FoodInfo;
+import com.gdsc.goodeat.domain.FoodScrapper;
 import com.gdsc.goodeat.domain.Language;
 import com.gdsc.goodeat.domain.MenuItem;
 import com.gdsc.goodeat.domain.OcrReader;
@@ -14,15 +14,17 @@ import com.gdsc.goodeat.dto.ReconfigureResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReconfigurationService {
 
   private final TranslationClient translationClient;
   private final CurrencyConverter currencyConverter;
-  private final FoodScraper foodScraper;
+  private final FoodScrapper foodScraper;
   private final OcrReader ocrReader;
 
   /**
@@ -36,9 +38,11 @@ public class ReconfigurationService {
     final Currency userCurrency = Currency.fromCurrencyName(request.userCurrencyName());
 
     //menuName
+    log.info("ocr 시작");
     final List<MenuItem> menuItems = ocrReader.read(request.base64EncodedImage());
+    log.info("ocr 끝");
     //음식 정보 크롤링 : 조회 후 설명 번역
-    final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage);
+    final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage, originLanguage);
     //환율 계산
     final List<PriceInfo> convertedPrices = convertCurrency(
         menuItems, originCurrency, userCurrency
@@ -55,7 +59,7 @@ public class ReconfigurationService {
           foodInfos.get(i),
           menuItems.get(i),
           translatedMenuNames.get(i),
-          convertedPrices.get(i).getOriginPrice()
+          convertedPrices.get(i)
       );
       responses.add(response);
     }
@@ -66,33 +70,42 @@ public class ReconfigurationService {
   private List<String> translatedMenuName(
       final List<MenuItem> menuItems, final Language originLanguage, final Language userLanguage
   ) {
-    return menuItems.stream()
+    log.info("번역 시작");
+    final List<String> result = menuItems.stream()
         .map(menuItem -> translationClient.translate(originLanguage, userLanguage, menuItem.name()))
         .toList();
+    log.info("번역 끝");
+    return result;
   }
 
   private List<PriceInfo> convertCurrency(
       final List<MenuItem> menuItems, final Currency originCurrency, final Currency userCurrency
   ) {
+    log.info("환율계산 시작");
     final List<Double> prices = menuItems.stream()
         .map(MenuItem::price)
         .toList();
+    log.info("환율계산 끝");
     return currencyConverter.convert(
         prices, originCurrency.getISO4217Code(), userCurrency.getISO4217Code()
     );
   }
 
   private List<FoodInfo> createFoodInfos(
-      final List<MenuItem> menuItems, final Language userLanguage
+      final List<MenuItem> menuItems, final Language userLanguage, final Language originLanguage
   ) {
+    log.info("이미지 크롤링 시작");
     final List<String> menuItemNames = menuItems.stream()
         .map(MenuItem::name)
+        .map(name -> translationClient.translate(originLanguage, Language.ENGLISH, name))
         .toList();
-    return foodScraper.scrape(menuItemNames).stream()
+    final List<FoodInfo> result = foodScraper.scrape(menuItemNames).stream()
         .map(foodInfo -> new FoodInfo(
             foodInfo.getImage(),
             foodInfo.getPreviewImage(),
             translationClient.translate(Language.ENGLISH, userLanguage, foodInfo.getDescription())
         )).toList();
+    log.info("이미지 크롤링 끝");
+    return result;
   }
 }

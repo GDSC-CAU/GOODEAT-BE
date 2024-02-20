@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Profile("test")
 public class FakeTranslationClient implements TranslationClient {
 
-  public static final String TRANSLATION_POST_FIX = "test";
+  public static final String TRANSLATION_POST_FIX = " translated";
 
   @Override
   public String translate(final Language from, final Language to, final String content) {

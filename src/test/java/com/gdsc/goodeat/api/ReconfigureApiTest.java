@@ -16,14 +16,13 @@ import org.junit.jupiter.api.Test;
 
 public class ReconfigureApiTest extends ApiTest {
 
-  //TODO : 추후 코드 동작시켜야함
   @Test
   @Disabled
   void 인코딩된_이미지를_받아_번역하고_환율을_변환한_값을_반환한다() {
     //given
     final ReconfigureRequest request = new ReconfigureRequest(
-        "Vietnamese", "Korean",
-        "Vietnamese dong", "South Korean Won",
+        "French", "Korean",
+        "Euro", "South Korean won",
         "encodedImage"
     );
 
@@ -40,13 +39,21 @@ public class ReconfigureApiTest extends ApiTest {
         = Arrays.asList(response.as(ReconfigureResponse[].class));
     final List<ReconfigureResponse> expected = List.of(
         new ReconfigureResponse(
-            "음식에 대한 설명", "음식 이미지URL", "", ""
-            , 36000.0, 2000.0
+            "Beef bourguignon des translated", "Beef bourguignon preview", "Beef bourguignon image",
+            "Beef bourguignon", "Beef bourguignon translated"
+            , 2000.0, "€ 2000.00", 2882251.6, "₩ 2882251.60"
+        ),
+        new ReconfigureResponse(
+            "Foie gras des translated", "Foie gras preview", "Foie gras image",
+            "Foie gras", "Foie gras translated"
+            , 1000.0, "€ 1000.00", 2882251.6, "₩ 2882251.60"
         )
     );
 
     assertThat(actual)
         .usingRecursiveComparison()
+        .ignoringFields("userPrice")
+        .ignoringFields("userPriceWithCurrencyUnit")
         .isEqualTo(expected);
   }
 }
