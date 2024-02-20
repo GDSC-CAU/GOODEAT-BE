@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CurrencyController {
+
   private final CurrencyService currencyService;
 
   public CurrencyController(final CurrencyService currencyService) {
@@ -16,7 +17,7 @@ public class CurrencyController {
   }
 
   @GetMapping("/currency")
-  public ResponseEntity<List<CurrencyResponse>> getCurrencies(){
+  public ResponseEntity<List<CurrencyResponse>> getCurrencies() {
     final List<CurrencyResponse> currencyResponses = currencyService.findAllCurrencies();
     return ResponseEntity.ok(currencyResponses);
   }

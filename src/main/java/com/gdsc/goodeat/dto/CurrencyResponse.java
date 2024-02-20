@@ -14,7 +14,7 @@ public class CurrencyResponse {
     this.currencyName = currencyName;
   }
 
-  public static CurrencyResponse from(final Currency currency){
+  public static CurrencyResponse from(final Currency currency) {
     return new CurrencyResponse(currency.getCurrencyName());
   }
 

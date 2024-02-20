@@ -1,6 +1,7 @@
 package com.gdsc.goodeat.service;
 
 import static com.gdsc.goodeat.fake.FakeTranslationClient.TRANSLATION_POST_FIX;
+import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdsc.goodeat.dto.ScriptGenerateRequest;
@@ -29,8 +30,9 @@ class ScriptServiceTest extends ServiceTest {
     //when
     final ScriptResponse actual = scriptService.generateScript(request);
     final ScriptResponse expected = new ScriptResponse(
-        "Xin chào. Tôi muốn đặt 3 Bún Chả" + TRANSLATION_POST_FIX,
-        "Xin chào. Tôi muốn đặt 3 Bún Chả"
+        "Hello i want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả",
+        "Hello i want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả"
+            + TRANSLATION_POST_FIX
     );
 
     assertThat(actual)

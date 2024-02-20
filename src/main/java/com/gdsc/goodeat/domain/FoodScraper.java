@@ -87,7 +87,8 @@ public class FoodScraper {
     FoodInfo foodInfo = new FoodInfo();
 
     try {
-      foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src").replace("?mw=1300", ""));
+      foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src")
+          .replace("?mw=1300", ""));
     } catch (NoSuchElementException e) {
       foodInfo.setImage(FOOD_IMG_NOT_FOUND_URL);
     }
