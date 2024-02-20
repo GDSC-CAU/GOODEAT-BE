@@ -3,8 +3,7 @@ package com.gdsc.goodeat.service;
 import com.gdsc.goodeat.domain.Language;
 import com.gdsc.goodeat.domain.OrderItem;
 import com.gdsc.goodeat.domain.Script;
-import com.gdsc.goodeat.domain.ScriptGeneratorComposite;
-import com.gdsc.goodeat.domain.TranslationClient;
+import com.gdsc.goodeat.domain.ScriptGenerator;
 import com.gdsc.goodeat.dto.ScriptGenerateRequest;
 import com.gdsc.goodeat.dto.ScriptGenerateRequest.MenuItemRequest;
 import com.gdsc.goodeat.dto.ScriptResponse;
@@ -16,8 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ScriptService {
 
-  private final ScriptGeneratorComposite scriptGeneratorComposite;
-  private final TranslationClient translationClient;
+  private final ScriptGenerator scriptGenerator;
 
   public ScriptResponse generateScript(final ScriptGenerateRequest request) {
     final Language sourceLanguage = Language.fromLanguageName(request.originLanguageName());
@@ -28,10 +26,8 @@ public class ScriptService {
         .map(MenuItemRequest::toDomain)
         .toList();
 
-    final Script travleScript = scriptGeneratorComposite.genrateScript(sourceLanguage, orderItems);
-    final String userScript = translationClient
-        .translate(sourceLanguage, targetLanguage, travleScript.script());
+    final Script script = scriptGenerator.generate(sourceLanguage, targetLanguage, orderItems);
 
-    return new ScriptResponse(userScript, travleScript.script());
+    return new ScriptResponse(script.userScript(), script.originScript());
   }
 }
