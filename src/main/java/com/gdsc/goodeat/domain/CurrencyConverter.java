@@ -1,7 +1,7 @@
 package com.gdsc.goodeat.domain;
 
-import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_ELEMENT_NOT_FOUND;
+import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCRAPING_FAILED;
 
 import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
@@ -9,7 +9,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jsoup.Jsoup;
@@ -79,6 +78,7 @@ public class CurrencyConverter {
   @Data
   @AllArgsConstructor
   public static class PriceInfo {
+
     private Double originPrice;
     private String originPriceWithCurrencyUnit;
     private Double userPrice;

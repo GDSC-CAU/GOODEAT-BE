@@ -14,6 +14,7 @@ public record ScriptGenerateRequest(
       String userMenuName,
       int quantity
   ) {
+
     public OrderItem toDomain() {
       return new OrderItem(originMenuName, userMenuName, quantity);
     }

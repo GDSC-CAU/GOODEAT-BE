@@ -16,7 +16,9 @@ public class ScriptController {
   private final ScriptService scriptService;
 
   @PostMapping("/script")
-  public ResponseEntity<ScriptResponse> generateScript(@RequestBody final ScriptGenerateRequest request) {
+  public ResponseEntity<ScriptResponse> generateScript(
+      @RequestBody final ScriptGenerateRequest request
+  ) {
     final ScriptResponse response = scriptService.generateScript(request);
     return ResponseEntity.ok(response);
   }

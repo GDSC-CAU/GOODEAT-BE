@@ -24,6 +24,13 @@ public class ScriptGenerator {
     languageScriptPrefixMap.put(ENGLISH, ENGLISH_SCRIPT_PREFIX);
   }
 
+  private static String concatOrder(final List<OrderItem> orderItems) {
+    return orderItems.stream()
+        .map(orderItem -> String.format(ORDER_ITEM_FORMAT, orderItem.quantity(),
+            orderItem.originMenuName()))
+        .collect(Collectors.joining(lineSeparator()));
+  }
+
   /**
    * @param sourceLanguage 주문 목록의 언어
    * @param targetLanguage 번역하고 싶은 언어
@@ -50,12 +57,5 @@ public class ScriptGenerator {
         sourceLanguage,
         key -> translationClient.translate(ENGLISH, sourceLanguage, ENGLISH_SCRIPT_PREFIX)
     );
-  }
-
-  private static String concatOrder(final List<OrderItem> orderItems) {
-    return orderItems.stream()
-        .map(orderItem -> String.format(ORDER_ITEM_FORMAT, orderItem.quantity(),
-            orderItem.originMenuName()))
-        .collect(Collectors.joining(lineSeparator()));
   }
 }
