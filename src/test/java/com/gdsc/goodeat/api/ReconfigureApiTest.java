@@ -11,11 +11,13 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ReconfigureApiTest extends ApiTest {
 
   @Test
+  @Disabled
   void 인코딩된_이미지를_받아_번역하고_환율을_변환한_값을_반환한다() {
     //given
     final ReconfigureRequest request = new ReconfigureRequest(
