@@ -14,10 +14,12 @@ import com.gdsc.goodeat.dto.ReconfigureResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReconfigurationService {
 
   private final TranslationClient translationClient;
@@ -36,7 +38,9 @@ public class ReconfigurationService {
     final Currency userCurrency = Currency.fromCurrencyName(request.userCurrencyName());
 
     //menuName
+    log.info("ocr 시작");
     final List<MenuItem> menuItems = ocrReader.read(request.base64EncodedImage());
+    log.info("ocr 끝");
     //음식 정보 크롤링 : 조회 후 설명 번역
     final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage);
     //환율 계산
@@ -66,17 +70,22 @@ public class ReconfigurationService {
   private List<String> translatedMenuName(
       final List<MenuItem> menuItems, final Language originLanguage, final Language userLanguage
   ) {
-    return menuItems.stream()
+    log.info("번역 시작");
+    final List<String> result = menuItems.stream()
         .map(menuItem -> translationClient.translate(originLanguage, userLanguage, menuItem.name()))
         .toList();
+    log.info("번역 끝");
+    return result;
   }
 
   private List<PriceInfo> convertCurrency(
       final List<MenuItem> menuItems, final Currency originCurrency, final Currency userCurrency
   ) {
+    log.info("환율계산 시작");
     final List<Double> prices = menuItems.stream()
         .map(MenuItem::price)
         .toList();
+    log.info("환율계산 끝");
     return currencyConverter.convert(
         prices, originCurrency.getISO4217Code(), userCurrency.getISO4217Code()
     );
@@ -85,14 +94,17 @@ public class ReconfigurationService {
   private List<FoodInfo> createFoodInfos(
       final List<MenuItem> menuItems, final Language userLanguage
   ) {
+    log.info("이미지 크롤링 시작");
     final List<String> menuItemNames = menuItems.stream()
         .map(MenuItem::name)
         .toList();
-    return foodScraper.scrape(menuItemNames).stream()
+    final List<FoodInfo> result = foodScraper.scrape(menuItemNames).stream()
         .map(foodInfo -> new FoodInfo(
             foodInfo.getImage(),
             foodInfo.getPreviewImage(),
             translationClient.translate(Language.ENGLISH, userLanguage, foodInfo.getDescription())
         )).toList();
+    log.info("이미지 크롤링 끝");
+    return result;
   }
 }

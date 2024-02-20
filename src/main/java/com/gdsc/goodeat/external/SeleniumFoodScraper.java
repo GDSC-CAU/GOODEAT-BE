@@ -8,7 +8,10 @@ import com.gdsc.goodeat.domain.FoodScrapper;
 import com.gdsc.goodeat.exception.FoodException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -19,9 +22,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 @Profile("!test")
 public class SeleniumFoodScraper implements FoodScrapper {
 
+  public static final String FOOD_DES_NOT_FOUND = "";
   private static final String TASTEATLAS_URL = "https://www.tasteatlas.com/";
   private static final String FOOD_IMG_NOT_FOUND_URL = "https://storage.googleapis.com/goodeat/food_image_not_found.jpg";
   private static final Duration DEFAULT_IMPLICIT_WAIT_DURATION = Duration.ofSeconds(5);
@@ -30,46 +35,54 @@ public class SeleniumFoodScraper implements FoodScrapper {
   private static final String IMAGE_SELECTOR = "img.img";
   private static final String DESCRIPTION_SELECTOR = "div.read-more--hidden.ng-scope";
 
+  private final Map<String, FoodInfo> foodInfoCache = new HashMap<>();
+
   @Override
   public List<FoodInfo> scrape(final List<String> foodList) {
     final WebDriver driver = gerateWebDriver();
 
-    List<FoodInfo> foodInfoList = new ArrayList<>();
+    final List<FoodInfo> foodInfos = new ArrayList<>();
 
     for (String foodName : foodList) {
-      FoodInfo foodInfo;
-      try {
-        driver.get(TASTEATLAS_URL);
-
-        // input food name & search
-        WebElement searchInput = driver.findElement(By.cssSelector(SEARCH_INPUT_SELECTOR));
-        searchInput.click();
-        searchInput.sendKeys(foodName);
-        driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
-
-        // get search result & enter page
-        WebElement searchResult = getSearchResult(driver);
-        System.out.println(searchResult.getAttribute("src").replace("?mw=150", ""));
-        String preview = searchResult.getAttribute("src").replace("?mw=150", "");
-        searchResult.click();
-        driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
-
-        // extract info
-        foodInfo = extractFoodInfo(driver);
-        foodInfo.setPreviewImage(preview);
-      } catch (FoodException e) {
-        foodInfo = new FoodInfo(FOOD_IMG_NOT_FOUND_URL, FOOD_IMG_NOT_FOUND_URL, "");
-      } catch (NoSuchElementException e) {
-        driver.quit();
-        throw new FoodException(FOOD_SCRAPING_FAILED);
-      }
-
-      foodInfoList.add(foodInfo);
+      final FoodInfo foodInfo = foodInfoCache.computeIfAbsent(
+          foodName,
+          name -> scrapFoodInfo(name, driver)
+      );
+      foodInfos.add(foodInfo);
     }
 
     driver.quit();
 
-    return foodInfoList;
+    return foodInfos;
+  }
+
+  private FoodInfo scrapFoodInfo(final String foodName, final WebDriver driver) {
+    try {
+      driver.get(TASTEATLAS_URL);
+
+      // input food name & search
+      WebElement searchInput = driver.findElement(By.cssSelector(SEARCH_INPUT_SELECTOR));
+      searchInput.click();
+      searchInput.sendKeys(foodName);
+      driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
+
+      // get search result & enter page
+      WebElement searchResult = getSearchResult(driver);
+      System.out.println(searchResult.getAttribute("src").replace("?mw=150", ""));
+      String preview = searchResult.getAttribute("src").replace("?mw=150", "");
+      searchResult.click();
+      driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
+
+      // extract info
+      final FoodInfo foodInfo = extractFoodInfo(driver);
+      foodInfo.setPreviewImage(preview);
+      return foodInfo;
+    } catch (FoodException e) {
+      return new FoodInfo(FOOD_IMG_NOT_FOUND_URL, FOOD_IMG_NOT_FOUND_URL, FOOD_DES_NOT_FOUND);
+    } catch (NoSuchElementException e) {
+      driver.quit();
+      throw new FoodException(FOOD_SCRAPING_FAILED);
+    }
   }
 
   private static WebDriver gerateWebDriver() {
