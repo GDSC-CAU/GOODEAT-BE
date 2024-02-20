@@ -13,8 +13,8 @@ public class FakeFoodScrapper implements FoodScrapper {
   @Override
   public List<FoodInfo> scrape(final List<String> foodList) {
     return List.of(
-        new FoodInfo("Beef bourguignon image", "Beef bourguignon preview", "Beef bourguignon"),
-        new FoodInfo("Foie gras image", "Foie gras preview", "Foie gras")
+        new FoodInfo("Beef bourguignon image", "Beef bourguignon preview", "Beef bourguignon des"),
+        new FoodInfo("Foie gras image", "Foie gras preview", "Foie gras des")
     );
   }
 }
