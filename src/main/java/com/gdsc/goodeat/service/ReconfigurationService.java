@@ -42,7 +42,7 @@ public class ReconfigurationService {
     final List<MenuItem> menuItems = ocrReader.read(request.base64EncodedImage());
     log.info("ocr 끝");
     //음식 정보 크롤링 : 조회 후 설명 번역
-    final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage);
+    final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage, originLanguage);
     //환율 계산
     final List<PriceInfo> convertedPrices = convertCurrency(
         menuItems, originCurrency, userCurrency
@@ -92,11 +92,12 @@ public class ReconfigurationService {
   }
 
   private List<FoodInfo> createFoodInfos(
-      final List<MenuItem> menuItems, final Language userLanguage
+      final List<MenuItem> menuItems, final Language userLanguage, final Language originLanguage
   ) {
     log.info("이미지 크롤링 시작");
     final List<String> menuItemNames = menuItems.stream()
         .map(MenuItem::name)
+        .map(name -> translationClient.translate(originLanguage, Language.ENGLISH, name))
         .toList();
     final List<FoodInfo> result = foodScraper.scrape(menuItemNames).stream()
         .map(foodInfo -> new FoodInfo(
