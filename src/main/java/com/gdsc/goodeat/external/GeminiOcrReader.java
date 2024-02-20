@@ -20,11 +20,13 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GeminiOcr implements OcrReader {
+@Profile("!test")
+public class GeminiOcrReader implements OcrReader {
 
   private static final String PROJECT_ID = "sc24-goodeat";
   private static final String LOCATION = "us-central1";
@@ -34,7 +36,7 @@ public class GeminiOcr implements OcrReader {
   private final GoogleCredentials credentials;
   private final ObjectMapper objectMapper;
 
-  public GeminiOcr(
+  public GeminiOcrReader(
       @Value("${google.credential.path:not prod}") final String credentialPath,
       final ObjectMapper objectMapper
   ) throws IOException {

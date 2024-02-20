@@ -3,7 +3,7 @@ package com.gdsc.goodeat.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gdsc.goodeat.external.GeminiOcr;
+import com.gdsc.goodeat.external.GeminiOcrReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
-class GeminiOcrTest {
+class GeminiOcrReaderTest {
 
   @Test
   @Disabled
   void OCR로_읽은_메뉴를_객체로_변환해준다() throws IOException {
     //given`
-    final GeminiOcr geminiOcr = new GeminiOcr(
+    final GeminiOcrReader geminiOcrReader = new GeminiOcrReader(
         "secret/google-cloud-credentials.json", new ObjectMapper()
     );
 
@@ -25,7 +25,7 @@ class GeminiOcrTest {
     final Scanner scanner = new Scanner(new ClassPathResource("image.txt").getInputStream());
     final String encodedImage = scanner.nextLine();
 
-    final List<MenuItem> actual = geminiOcr.read(encodedImage);
+    final List<MenuItem> actual = geminiOcrReader.read(encodedImage);
     final List<MenuItem> expected = List.of(
         new MenuItem("멜팅 스테이크 파스타", 17.0),
         new MenuItem("베이컨 까르보나라", 17.0),
