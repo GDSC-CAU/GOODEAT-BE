@@ -3,6 +3,7 @@ package com.gdsc.goodeat.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdsc.goodeat.external.GeminiOcr;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;

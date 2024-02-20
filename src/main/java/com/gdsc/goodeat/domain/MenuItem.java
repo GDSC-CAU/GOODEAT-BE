@@ -1,5 +1,5 @@
 package com.gdsc.goodeat.domain;
 
-public record MenuItem(String name, Price price) {
+public record MenuItem(String name, Double price) {
 
 }
