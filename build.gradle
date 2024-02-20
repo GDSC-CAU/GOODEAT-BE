@@ -39,6 +39,10 @@ dependencies {
     //crawling
     implementation 'org.jsoup:jsoup:1.16.1'
     implementation 'org.seleniumhq.selenium:selenium-java:4.14.1'
+
+    //ocr
+    implementation 'com.google.cloud:google-cloud-vertexai'
+    implementation platform('com.google.cloud:libraries-bom:26.32.0')
 }
 
 tasks.named('test') {

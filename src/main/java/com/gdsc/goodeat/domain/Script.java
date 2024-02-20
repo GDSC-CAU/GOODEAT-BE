@@ -1,5 +1,8 @@
 package com.gdsc.goodeat.domain;
 
-public record Script(String script) {
+public record Script(
+    String userScript,
+    String originScript
+) {
 
 }

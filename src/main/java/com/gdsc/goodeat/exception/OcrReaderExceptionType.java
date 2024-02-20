@@ -1,11 +1,14 @@
 package com.gdsc.goodeat.exception;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 import com.gdsc.goodeat.base.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum OcrReaderExceptionType implements BaseExceptionType {
 
-  OCR_READER_NOT_FOUND(HttpStatus.NOT_FOUND, "요청한 언어의 ocr reader를 찾을 수 없습니다.");
+  OCR_READ_FAIL(INTERNAL_SERVER_ERROR, "OCR을 읽는데 실패했습니다."),
+  OCR_RESULT_IS_NOT_JSON(INTERNAL_SERVER_ERROR, "OCR 결과를 객체로 변환하는데 실패했습니다.");
 
   private final HttpStatus httpStatus;
   private final String exceptionMessage;
