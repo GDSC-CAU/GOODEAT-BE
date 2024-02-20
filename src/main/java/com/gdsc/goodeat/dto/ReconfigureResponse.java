@@ -27,7 +27,7 @@ public class ReconfigureResponse {
         foodInfo.getImage(),
         menuItem.name(),
         userMenuName,
-        menuItem.price().amount(),
+        menuItem.price(),
         userPrice
     );
   }
