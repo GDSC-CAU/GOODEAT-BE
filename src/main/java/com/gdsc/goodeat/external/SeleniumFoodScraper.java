@@ -1,8 +1,9 @@
-package com.gdsc.goodeat.domain;
+package com.gdsc.goodeat.external;
 
 import static com.gdsc.goodeat.exception.FoodExceptionType.FOOD_NOT_FOUND;
 import static com.gdsc.goodeat.exception.FoodExceptionType.FOOD_SCRAPING_FAILED;
 
+import com.gdsc.goodeat.domain.FoodScrapper;
 import com.gdsc.goodeat.exception.FoodException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FoodScraper {
+public class SeleniumFoodScraper implements FoodScrapper {
 
   private static final String TASTEATLAS_URL = "https://www.tasteatlas.com/";
   private static final String FOOD_IMG_NOT_FOUND_URL = "https://storage.googleapis.com/goodeat/food_image_not_found.jpg";
@@ -28,6 +29,7 @@ public class FoodScraper {
   private static final String IMAGE_SELECTOR = "img.img";
   private static final String DESCRIPTION_SELECTOR = "div.read-more--hidden.ng-scope";
 
+  @Override
   public List<FoodInfo> scrape(final List<String> foodList) {
     final WebDriver driver = gerateWebDriver();
 
