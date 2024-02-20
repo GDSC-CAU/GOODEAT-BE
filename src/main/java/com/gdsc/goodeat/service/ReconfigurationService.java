@@ -3,8 +3,8 @@ package com.gdsc.goodeat.service;
 import com.gdsc.goodeat.domain.Currency;
 import com.gdsc.goodeat.domain.CurrencyConverter;
 import com.gdsc.goodeat.domain.CurrencyConverter.PriceInfo;
-import com.gdsc.goodeat.domain.FoodScraper;
-import com.gdsc.goodeat.domain.FoodScraper.FoodInfo;
+import com.gdsc.goodeat.domain.FoodInfo;
+import com.gdsc.goodeat.domain.FoodScrapper;
 import com.gdsc.goodeat.domain.Language;
 import com.gdsc.goodeat.domain.MenuItem;
 import com.gdsc.goodeat.domain.OcrReader;
@@ -22,7 +22,7 @@ public class ReconfigurationService {
 
   private final TranslationClient translationClient;
   private final CurrencyConverter currencyConverter;
-  private final FoodScraper foodScraper;
+  private final FoodScrapper foodScraper;
   private final OcrReader ocrReader;
 
   /**

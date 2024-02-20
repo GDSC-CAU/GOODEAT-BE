@@ -1,6 +1,5 @@
 package com.gdsc.goodeat.domain;
 
-import com.gdsc.goodeat.external.SeleniumFoodScraper.FoodInfo;
 import java.util.List;
 
 public interface FoodScrapper {

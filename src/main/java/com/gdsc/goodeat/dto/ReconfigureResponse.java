@@ -1,7 +1,7 @@
 package com.gdsc.goodeat.dto;
 
 import com.gdsc.goodeat.domain.CurrencyConverter.PriceInfo;
-import com.gdsc.goodeat.domain.FoodScraper.FoodInfo;
+import com.gdsc.goodeat.domain.FoodInfo;
 import com.gdsc.goodeat.domain.MenuItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

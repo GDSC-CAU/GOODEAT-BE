@@ -3,22 +3,23 @@ package com.gdsc.goodeat.external;
 import static com.gdsc.goodeat.exception.FoodExceptionType.FOOD_NOT_FOUND;
 import static com.gdsc.goodeat.exception.FoodExceptionType.FOOD_SCRAPING_FAILED;
 
+import com.gdsc.goodeat.domain.FoodInfo;
 import com.gdsc.goodeat.domain.FoodScrapper;
 import com.gdsc.goodeat.exception.FoodException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("!test")
 public class SeleniumFoodScraper implements FoodScrapper {
 
   private static final String TASTEATLAS_URL = "https://www.tasteatlas.com/";
@@ -103,18 +104,5 @@ public class SeleniumFoodScraper implements FoodScrapper {
     }
 
     return foodInfo;
-  }
-
-  @Data
-  @AllArgsConstructor
-  public static class FoodInfo {
-
-    private String image;
-    private String previewImage;
-    private String description;
-
-    public FoodInfo() {
-
-    }
   }
 }

@@ -1,9 +1,13 @@
 package com.gdsc.goodeat.fake;
 
+import com.gdsc.goodeat.domain.FoodInfo;
 import com.gdsc.goodeat.domain.FoodScrapper;
-import com.gdsc.goodeat.external.SeleniumFoodScraper.FoodInfo;
 import java.util.List;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
+@Component
+@Profile("test")
 public class FakeFoodScrapper implements FoodScrapper {
 
   @Override
