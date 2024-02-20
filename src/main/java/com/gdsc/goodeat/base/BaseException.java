@@ -9,7 +9,7 @@ public abstract class BaseException extends RuntimeException {
     baseExceptionType = exceptionType;
   }
 
-  public BaseExceptionType exceptionType(){
+  public BaseExceptionType exceptionType() {
     return baseExceptionType;
   }
 }

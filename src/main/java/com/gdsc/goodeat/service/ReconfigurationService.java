@@ -43,7 +43,9 @@ public class ReconfigurationService {
     //음식 정보 크롤링 : 조회 후 설명 번역
     final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage);
     //환율 계산
-    final List<PriceInfo> convertedPrices = convertCurrency(menuItems, originCurrency, userCurrency);
+    final List<PriceInfo> convertedPrices = convertCurrency(
+        menuItems, originCurrency, userCurrency
+    );
     //음식 이름 번역
     final List<String> translatedMenuNames = translatedMenuName(
         menuItems, originLanguage, userLanguage
@@ -79,7 +81,9 @@ public class ReconfigurationService {
         .map(MenuItem::price)
         .map(Price::amount)
         .toList();
-    return currencyConverter.convert(prices, originCurrency.getISO4217Code(), userCurrency.getISO4217Code());
+    return currencyConverter.convert(
+        prices, originCurrency.getISO4217Code(), userCurrency.getISO4217Code()
+    );
   }
 
   private List<FoodInfo> createFoodInfos(

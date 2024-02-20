@@ -14,7 +14,7 @@ public class LanguageResponse {
     this.languageName = languageName;
   }
 
-  public static LanguageResponse from(final Language language){
+  public static LanguageResponse from(final Language language) {
     return new LanguageResponse(language.getLanguageName());
   }
 
