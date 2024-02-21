@@ -8,9 +8,9 @@ import com.gdsc.goodeat.domain.FoodScrapper;
 import com.gdsc.goodeat.exception.FoodException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -35,7 +35,7 @@ public class SeleniumFoodScraper implements FoodScrapper {
   private static final String IMAGE_SELECTOR = "img.img";
   private static final String DESCRIPTION_SELECTOR = "div.read-more--hidden.ng-scope";
 
-  private final Map<String, FoodInfo> foodInfoCache = new HashMap<>();
+  private final Map<String, FoodInfo> foodInfoCache = new ConcurrentHashMap<>();
 
   @Override
   public List<FoodInfo> scrape(final List<String> foodList) {
