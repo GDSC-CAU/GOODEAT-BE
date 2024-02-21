@@ -34,7 +34,13 @@ public class GeminiFoodScrapper implements FoodScrapper {
   }
 
   @Override
-  public List<FoodInfo> scrape(final List<String> foodList) {
+  public List<FoodInfo> scrape(final List<String> foodNames) {
+    return foodNames.stream()
+        .map(foodName -> foodInfoCache.computeIfAbsent(foodName, this::scrapFoodInfo))
+        .toList();
+  }
+
+  private FoodInfo scrapFoodInfo(final String foodName) {
     return null;
   }
 }

@@ -36,12 +36,12 @@ public class SeleniumFoodScraper implements FoodScrapper {
   private final Map<String, FoodInfo> foodInfoCache = new ConcurrentHashMap<>();
 
   @Override
-  public List<FoodInfo> scrape(final List<String> foodList) {
+  public List<FoodInfo> scrape(final List<String> foods) {
     final WebDriver driver = gerateWebDriver();
 
     final List<FoodInfo> foodInfos = new ArrayList<>();
 
-    for (String foodName : foodList) {
+    for (String foodName : foods) {
       final FoodInfo foodInfo = foodInfoCache.computeIfAbsent(
           foodName,
           name -> scrapFoodInfo(name, driver)

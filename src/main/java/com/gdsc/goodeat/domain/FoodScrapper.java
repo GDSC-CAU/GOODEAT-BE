@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface FoodScrapper {
 
-  List<FoodInfo> scrape(final List<String> foodList);
+  List<FoodInfo> scrape(final List<String> foods);
 }
