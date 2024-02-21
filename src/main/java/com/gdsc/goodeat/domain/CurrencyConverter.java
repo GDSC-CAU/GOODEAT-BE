@@ -6,39 +6,42 @@ import static com.gdsc.goodeat.exception.CurrencyExceptionType.CURRENCY_RATE_SCR
 import com.gdsc.goodeat.exception.CurrencyException;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class CurrencyConverter {
 
   private static final String GOOGLE_FINANCE_URL = "https://www.google.com/finance/quote/";
 
-  public List<PriceInfo> convert(List<Double> originPriceList, String from, String to) {
-    String url = buildUrl(from, to);
-    String html = scrapHtml(url);
-    Double exchangeRate = extractExchangeRate(html);
+  private final CurrencyPriceConcater currencyPriceConcater;
 
-    List<PriceInfo> priceList = new ArrayList<>();
+  public List<PriceInfo> convert(List<Double> originPrices, String from, String to) {
+    final String url = buildUrl(from, to);
+    final String html = scrapHtml(url);
+    final Double exchangeRate = extractExchangeRate(html);
 
-    for (Double originPrice : originPriceList) {
-      Double userPrice = Double.valueOf(String.format("%.2f", originPrice * exchangeRate));
+    return originPrices.stream()
+        .map(originPrice -> generatePriceInfo(from, to, originPrice, exchangeRate))
+        .toList();
+  }
 
-      priceList.add(new PriceInfo(
-          originPrice,
-          addCurrencyUnit(originPrice, from),
-          userPrice,
-          addCurrencyUnit(userPrice, to)));
-    }
-
-    return priceList;
+  private PriceInfo generatePriceInfo(
+      final String from, final String to, final Double originPrice, final Double exchangeRate
+  ) {
+    final Double userPrice = originPrice * exchangeRate;
+    return new PriceInfo(
+        originPrice, currencyPriceConcater.concatPriceWithCurrency(from, originPrice)
+        , userPrice, currencyPriceConcater.concatPriceWithCurrency(to, userPrice)
+    );
   }
 
   private String buildUrl(String from, String to) {
