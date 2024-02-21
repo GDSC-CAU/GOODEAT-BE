@@ -7,12 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrencyPriceConcater {
 
-  public static final int DISPLAY_FRACTION_DIGITS_COUNT = 2;
+  private static final int DISPLAY_MAXIMUM_FRACTION_DIGITS_COUNT = 2;
+  private static final int DISPLAY_MINIMUM_FRACTION_DIGITS_COUNT = 0;
 
   public String concatPriceWithCurrency(final String currencyIsoCode, final Double amount) {
     final NumberFormat numberFormatter = NumberFormat.getCurrencyInstance();
     numberFormatter.setCurrency(java.util.Currency.getInstance(currencyIsoCode));
-    numberFormatter.setMaximumFractionDigits(DISPLAY_FRACTION_DIGITS_COUNT);
+    numberFormatter.setMaximumFractionDigits(DISPLAY_MAXIMUM_FRACTION_DIGITS_COUNT);
+    numberFormatter.setMinimumFractionDigits(DISPLAY_MINIMUM_FRACTION_DIGITS_COUNT);
     final String priceWithCurrencyUnit = numberFormatter.format(amount);
     return addSpaceBetweenPriceAndUnit(priceWithCurrencyUnit);
   }
