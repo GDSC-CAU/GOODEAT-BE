@@ -1,17 +1,11 @@
 package com.gdsc.goodeat.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public record FoodInfo(
 
-@Data
-@AllArgsConstructor
-public class FoodInfo {
+    String name,
+    String image,
+    String previewImage,
+    String description
+) {
 
-  private String image;
-  private String previewImage;
-  private String description;
-
-  public FoodInfo() {
-
-  }
 }
