@@ -34,9 +34,9 @@ public class CurrencyService {
     final Double userTotalPrice = calculatePrice(orders, OrderElementRequest::userPrice);
 
     final String originPriceWithCurrencyUnit = currencyPriceConcater
-        .concatPriceWithCurrency(originCurrency, originTotalPrice);
+        .concatPriceWithCurrency(originCurrency.getISO4217Code(), originTotalPrice);
     final String userPriceWithCurrencyUnit = currencyPriceConcater
-        .concatPriceWithCurrency(userCurrency, userTotalPrice);
+        .concatPriceWithCurrency(userCurrency.getISO4217Code(), userTotalPrice);
 
     return new CalculatePriceResponse(originPriceWithCurrencyUnit, userPriceWithCurrencyUnit);
   }
