@@ -18,12 +18,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import org.openqa.selenium.interactions.Actions;
 
-@Component
+@Deprecated
 @RequiredArgsConstructor
-@Profile("!test")
 public class SeleniumFoodScraper implements FoodScrapper {
 
   public static final String FOOD_DES_NOT_FOUND = "";
@@ -70,7 +68,8 @@ public class SeleniumFoodScraper implements FoodScrapper {
       WebElement searchResult = getSearchResult(driver);
       System.out.println(searchResult.getAttribute("src").replace("?mw=150", ""));
       String preview = searchResult.getAttribute("src").replace("?mw=150", "");
-      searchResult.click();
+      Actions act = new Actions(driver);
+      act.scrollToElement(searchResult).click().perform();
       driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT_DURATION);
 
       // extract info
@@ -105,7 +104,7 @@ public class SeleniumFoodScraper implements FoodScrapper {
     try {
       foodInfo.setImage(driver.findElement(By.cssSelector(IMAGE_SELECTOR)).getAttribute("src")
           .replace("?mw=1300", ""));
-    } catch (NoSuchElementException e) {
+    } catch (NoSuchElementException | NullPointerException e) {
       foodInfo.setImage(FOOD_IMG_NOT_FOUND_URL);
     }
 
