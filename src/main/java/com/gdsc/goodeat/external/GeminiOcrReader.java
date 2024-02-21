@@ -117,6 +117,7 @@ public class GeminiOcrReader implements OcrReader {
   private String removeMarkDownSyntax(final String result) {
     return result
         .replaceFirst("json", "")
+        .replaceFirst("JSON", "")
         .replaceAll("```", "");
   }
 }
