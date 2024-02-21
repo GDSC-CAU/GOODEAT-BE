@@ -9,9 +9,9 @@ public class CurrencyPriceConcater {
 
   public static final int DISPLAY_FRACTION_DIGITS_COUNT = 2;
 
-  public String concatPriceWithCurrency(final Currency currency, final Double amount) {
+  public String concatPriceWithCurrency(final String currencyIsoCode, final Double amount) {
     final NumberFormat numberFormatter = NumberFormat.getCurrencyInstance();
-    numberFormatter.setCurrency(java.util.Currency.getInstance(currency.getISO4217Code()));
+    numberFormatter.setCurrency(java.util.Currency.getInstance(currencyIsoCode));
     numberFormatter.setMaximumFractionDigits(DISPLAY_FRACTION_DIGITS_COUNT);
     final String priceWithCurrencyUnit = numberFormatter.format(amount);
     return addSpaceBetweenPriceAndUnit(priceWithCurrencyUnit);

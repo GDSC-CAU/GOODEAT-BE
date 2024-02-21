@@ -13,7 +13,9 @@ class CurrencyPriceConcaterTest {
   void 통화와_가격을_합칠_수_있다() {
     final Double amount = 41234.1234;
 
-    final String actual = concater.concatPriceWithCurrency(SOUTH_KOREAN_WON, amount);
+    final String actual = concater.concatPriceWithCurrency(
+        SOUTH_KOREAN_WON.getISO4217Code(), amount
+    );
     final String expected = "₩ 41,234.12";
 
     assertThat(actual)
