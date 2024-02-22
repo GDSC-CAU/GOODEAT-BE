@@ -18,8 +18,8 @@ public class ScriptService {
   private final ScriptGenerator scriptGenerator;
 
   public ScriptResponse generateScript(final ScriptGenerateRequest request) {
-    final Language sourceLanguage = Language.fromLanguageName(request.originLanguageName());
-    final Language targetLanguage = Language.fromLanguageName(request.userLanguageName());
+    final Language sourceLanguage = Language.fromLanguageName(request.userLanguageName());
+    final Language targetLanguage = Language.fromLanguageName(request.originLanguageName());
 
     final List<OrderItem> orderItems = request.menuItems()
         .stream()
