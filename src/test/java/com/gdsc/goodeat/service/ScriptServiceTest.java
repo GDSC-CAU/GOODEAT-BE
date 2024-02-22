@@ -30,8 +30,8 @@ class ScriptServiceTest extends ServiceTest {
     //when
     final ScriptResponse actual = scriptService.generateScript(request);
     final ScriptResponse expected = new ScriptResponse(
-        "Hello i want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả",
-        "Hello i want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả"
+        "Hello I want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả",
+        "Hello I want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả"
             + TRANSLATION_POST_FIX
     );
 
