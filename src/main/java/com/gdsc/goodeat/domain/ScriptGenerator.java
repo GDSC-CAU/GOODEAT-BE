@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class ScriptGenerator {
 
   private static final String ORDER_ITEM_FORMAT = "%d %s";
-  private static final String ENGLISH_SCRIPT_PREFIX = "Hello i want to order";
+  private static final String ENGLISH_SCRIPT_PREFIX = "Hello I want to order";
 
   private final Map<Language, String> languageScriptPrefixMap;
   private final TranslationClient translationClient;
