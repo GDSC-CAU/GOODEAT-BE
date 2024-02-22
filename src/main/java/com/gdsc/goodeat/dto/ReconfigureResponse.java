@@ -23,14 +23,13 @@ public class ReconfigureResponse {
   private final String userPriceWithCurrencyUnit;
 
   public static ReconfigureResponse createResponse(
-      final FoodInfo foodInfo, final MenuItem menuItem,
-      final String userMenuName, final PriceInfo priceInfo
+      final FoodInfo foodInfo, final String userMenuName, final PriceInfo priceInfo
   ) {
     return new ReconfigureResponse(
-        foodInfo.getDescription(),
-        foodInfo.getPreviewImage(),
-        foodInfo.getImage(),
-        menuItem.name(),
+        foodInfo.description(),
+        foodInfo.previewImage(),
+        foodInfo.image(),
+        foodInfo.name(),
         userMenuName,
         priceInfo.getOriginPrice(),
         priceInfo.getOriginPriceWithCurrencyUnit(),

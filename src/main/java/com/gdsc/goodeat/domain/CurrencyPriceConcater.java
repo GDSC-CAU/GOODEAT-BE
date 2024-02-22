@@ -41,7 +41,7 @@ public class CurrencyPriceConcater {
   }
 
   private static boolean isDifferentType(final char prevChar, final char currentChar) {
-    return !(Character.isDigit(prevChar) && Character.isDigit(currentChar)) ||
+    return (!Character.isDigit(prevChar) && Character.isDigit(currentChar)) ||
         (Character.isDigit(prevChar) && !Character.isDigit(currentChar));
   }
 }

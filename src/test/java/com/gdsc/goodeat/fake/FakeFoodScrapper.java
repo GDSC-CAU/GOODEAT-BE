@@ -11,10 +11,11 @@ import org.springframework.stereotype.Component;
 public class FakeFoodScrapper implements FoodScrapper {
 
   @Override
-  public List<FoodInfo> scrape(final List<String> foodList) {
+  public List<FoodInfo> scrap(final List<String> foods) {
     return List.of(
-        new FoodInfo("Beef bourguignon image", "Beef bourguignon preview", "Beef bourguignon des"),
-        new FoodInfo("Foie gras image", "Foie gras preview", "Foie gras des")
+        new FoodInfo("Beef bourguignon", "Beef bourguignon image", "Beef bourguignon preview",
+            "Beef bourguignon des"),
+        new FoodInfo("Foie gras", "Foie gras image", "Foie gras preview", "Foie gras des")
     );
   }
 }

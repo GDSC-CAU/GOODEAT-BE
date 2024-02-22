@@ -49,7 +49,7 @@ public class ReconfigurationService {
     );
     //음식 이름 번역
     final List<String> translatedMenuNames = translatedMenuName(
-        menuItems, originLanguage, userLanguage
+        foodInfos, originLanguage, userLanguage
     );
 
     final List<ReconfigureResponse> responses = new ArrayList<>();
@@ -57,7 +57,6 @@ public class ReconfigurationService {
     for (int i = 0; i < menuItems.size(); i++) {
       final ReconfigureResponse response = ReconfigureResponse.createResponse(
           foodInfos.get(i),
-          menuItems.get(i),
           translatedMenuNames.get(i),
           convertedPrices.get(i)
       );
@@ -68,11 +67,11 @@ public class ReconfigurationService {
   }
 
   private List<String> translatedMenuName(
-      final List<MenuItem> menuItems, final Language originLanguage, final Language userLanguage
+      final List<FoodInfo> foodInfos, final Language originLanguage, final Language userLanguage
   ) {
     log.info("번역 시작");
-    final List<String> result = menuItems.stream()
-        .map(menuItem -> translationClient.translate(originLanguage, userLanguage, menuItem.name()))
+    final List<String> result = foodInfos.stream()
+        .map(foodInfo -> translationClient.translate(originLanguage, userLanguage, foodInfo.name()))
         .toList();
     log.info("번역 끝");
     return result;
@@ -95,15 +94,18 @@ public class ReconfigurationService {
       final List<MenuItem> menuItems, final Language userLanguage, final Language originLanguage
   ) {
     log.info("이미지 크롤링 시작");
+    //TODO: 번역 API 최적화 고민
     final List<String> menuItemNames = menuItems.stream()
         .map(MenuItem::name)
         .map(name -> translationClient.translate(originLanguage, Language.ENGLISH, name))
         .toList();
-    final List<FoodInfo> result = foodScraper.scrape(menuItemNames).stream()
+    //TODO: 스크랩 최적화 고민
+    final List<FoodInfo> result = foodScraper.scrap(menuItemNames).stream()
         .map(foodInfo -> new FoodInfo(
-            foodInfo.getImage(),
-            foodInfo.getPreviewImage(),
-            translationClient.translate(Language.ENGLISH, userLanguage, foodInfo.getDescription())
+            foodInfo.name(),
+            foodInfo.image(),
+            foodInfo.previewImage(),
+            translationClient.translate(Language.ENGLISH, userLanguage, foodInfo.description())
         )).toList();
     log.info("이미지 크롤링 끝");
     return result;

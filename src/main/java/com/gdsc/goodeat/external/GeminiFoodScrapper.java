@@ -1,32 +1,26 @@
 package com.gdsc.goodeat.external;
 
-import static com.gdsc.goodeat.exception.OcrReaderExceptionType.OCR_READ_FAIL;
-import static com.gdsc.goodeat.exception.OcrReaderExceptionType.OCR_RESULT_IS_NOT_JSON;
+import static com.gdsc.goodeat.exception.FoodExceptionType.FOOD_RESULT_IS_NOT_JSON;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gdsc.goodeat.domain.MenuItem;
-import com.gdsc.goodeat.domain.OcrReader;
-import com.gdsc.goodeat.exception.OcrReaderException;
+import com.gdsc.goodeat.domain.FoodInfo;
+import com.gdsc.goodeat.domain.FoodScrapper;
+import com.gdsc.goodeat.exception.FoodException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.vertexai.VertexAI;
 import com.google.cloud.vertexai.api.GenerateContentResponse;
 import com.google.cloud.vertexai.generativeai.ContentMaker;
 import com.google.cloud.vertexai.generativeai.GenerativeModel;
-import com.google.cloud.vertexai.generativeai.PartMaker;
-import com.google.protobuf.ByteString;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 
-@Component
-@Profile("!test")
-public class GeminiOcrReader implements OcrReader {
+@Deprecated
+public class GeminiFoodScrapper implements FoodScrapper {
 
   private static final String PROJECT_ID = "sc24-goodeat";
   private static final String LOCATION = "us-central1";
@@ -35,59 +29,45 @@ public class GeminiOcrReader implements OcrReader {
 
   private final GoogleCredentials credentials;
   private final ObjectMapper objectMapper;
+  private final Map<String, FoodInfo> foodInfoCache = new ConcurrentHashMap<>();
 
-  public GeminiOcrReader(
-      @Value("${google.credential.path:not prod}") final String credentialPath,
-      final ObjectMapper objectMapper
+  public GeminiFoodScrapper(
+      @Value("${google.credential.path:not prod}") final String credentialPath
   ) throws IOException {
-    credentials = GoogleCredentials
+    this.credentials = GoogleCredentials
         .fromStream(new ClassPathResource(credentialPath)
             .getInputStream()).createScoped(SCOPE);
     this.objectMapper = new ObjectMapper();
   }
 
   @Override
-  public List<MenuItem> read(final String base64encodedImage) {
-    final ByteString byteStringImage = ByteString.copyFrom(
-        Base64.getDecoder().decode(base64encodedImage)
-    );
-
-    final String serializedResult = runGemini(byteStringImage);
-
-    System.out.println(serializedResult);
-
-    return deserialize(serializedResult);
+  public List<FoodInfo> scrap(final List<String> foodNames) {
+    return foodNames.stream()
+        .map(foodName -> foodInfoCache.computeIfAbsent(foodName, this::scrapFoodInfo))
+        .toList();
   }
 
-  public List<MenuItem> deserialize(final String serializeStr) {
-    try {
-      final MenuItem[] menuItems = objectMapper.readValue(serializeStr, MenuItem[].class);
-      return Arrays.stream(menuItems)
-          .toList();
-    } catch (final JsonProcessingException e) {
-      throw new OcrReaderException(OCR_RESULT_IS_NOT_JSON);
-    }
-  }
-
-  private String runGemini(final ByteString byteStringImage) {
+  private FoodInfo scrapFoodInfo(final String foodName) {
     try (final VertexAI vertexAI = new VertexAI(PROJECT_ID, LOCATION, credentials)) {
       final GenerativeModel model = new GenerativeModel(MODEL_NAME, vertexAI);
 
       final GenerateContentResponse response = model.generateContent(
-          ContentMaker.fromMultiModalData(
-              PartMaker.fromMimeTypeAndData("image/jpeg", byteStringImage),
-              "Please extract the name and price of the food from this menu image.\n"
-                  + "Please print it out in JSON format\n"
-                  + "[{"
-                  + "name: name of food (String)"
-                  + "price: price of food (double)"
-                  + "}, ... ]"
+          ContentMaker.fromString(
+              String.format(
+                  "Get the 200-character description and image url for food %s from the tasteatlas site\n",
+                  foodName)
+                  + "Please print it out in valid JSON format\n"
+                  + "{"
+                  + "image: valid image url of food (String)"
+                  + "description: 200-character description of food(String)"
+                  + "}"
           ));
       final String unicodeString = response.getCandidates(0).getContent().getParts(0).getText();
+      final String serializedString = decodeUnicode(unicodeString);
 
-      return decodeUnicode(unicodeString);
+      return deserialize(serializedString);
     } catch (final IOException e) {
-      throw new OcrReaderException(OCR_READ_FAIL);
+      throw new FoodException(FOOD_RESULT_IS_NOT_JSON);
     }
   }
 
@@ -113,11 +93,18 @@ public class GeminiOcrReader implements OcrReader {
     return removeMarkDownSyntax(result.toString());
   }
 
-  //TODO: 이 json을 어떻게 해결할지 고민해보기
   private String removeMarkDownSyntax(final String result) {
     return result
         .replaceFirst("json", "")
         .replaceFirst("JSON", "")
         .replaceAll("```", "");
+  }
+
+  public FoodInfo deserialize(final String serializeStr) {
+    try {
+      return objectMapper.readValue(serializeStr, FoodInfo.class);
+    } catch (final JsonProcessingException e) {
+      throw new FoodException(FOOD_RESULT_IS_NOT_JSON);
+    }
   }
 }
