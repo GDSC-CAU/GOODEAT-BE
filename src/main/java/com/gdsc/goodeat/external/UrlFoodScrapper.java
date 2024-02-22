@@ -35,7 +35,7 @@ public class UrlFoodScrapper implements FoodScrapper {
   private static final String IMAGE_SELECTOR = "meta[property=og:image]";
   private static final String DESCRIPTION_SELECTOR = "meta[property=og:description]";
   private static final String FOOD_SEARCH_QUERY = "https://www.tasteatlas.com/api/v3/autocomplete?onlyRecipes=false&query=%s";
-  private static final String AUTH = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6InRhX3dlYiIsImVtYWlsIjoidGFfd2ViIiwibmFtZWlkIjoiMCIsInJvbGUiOiJ0YV93ZWIiLCJBbm9ueW1vdXMiOiJ0cnVlIiwiaXNzIjoidGFzdGVhdGxhcy5jb20iLCJhdWQiOiJ0YV93ZWIiLCJleHAiOjE3MDg1MzM5MzgsIm5iZiI6MTcwODUxMjMzOH0.rM45ED0tkrV49cpJOPD02AZ8vNBUhWNvKMHRg8CXTVM";
+  private static final String AUTH = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6InRhX3dlYiIsImVtYWlsIjoidGFfd2ViIiwibmFtZWlkIjoiMCIsInJvbGUiOiJ0YV93ZWIiLCJBbm9ueW1vdXMiOiJ0cnVlIiwiaXNzIjoidGFzdGVhdGxhcy5jb20iLCJhdWQiOiJ0YV93ZWIiLCJleHAiOjE3MDg1OTM4MzgsIm5iZiI6MTcwODU3MjIzOH0.2a7hH00Qn4r1-6TRGjjqu_B7TFsZO-RYqDA5BEyhev8";
 
   private final Map<String, FoodInfo> foodInfoCache = new ConcurrentHashMap<>();
   private final RestTemplate restTemplate = new RestTemplateBuilder().build();
@@ -44,7 +44,7 @@ public class UrlFoodScrapper implements FoodScrapper {
   @Override
   public List<FoodInfo> scrap(final List<String> foodNames) {
     return foodNames.stream()
-        .map(this::scrapFoodInfo)
+        .map(foodName -> foodInfoCache.computeIfAbsent(foodName, this::scrapFoodInfo))
         .toList();
   }
 
