@@ -1,5 +1,7 @@
 package com.gdsc.goodeat.service;
 
+import static com.gdsc.goodeat.domain.Language.ENGLISH;
+
 import com.gdsc.goodeat.domain.Currency;
 import com.gdsc.goodeat.domain.CurrencyConverter;
 import com.gdsc.goodeat.domain.CurrencyConverter.PriceInfo;
@@ -40,9 +42,12 @@ public class ReconfigurationService {
     //menuName
     log.info("ocr 시작");
     final List<MenuItem> menuItems = ocrReader.read(request.base64EncodedImage());
+    final List<String> menuItemNames = menuItems.stream()
+        .map(MenuItem::name)
+        .toList();
     log.info("ocr 끝");
     //음식 정보 크롤링 : 조회 후 설명 번역
-    final List<FoodInfo> foodInfos = createFoodInfos(menuItems, userLanguage, originLanguage);
+    final List<FoodInfo> foodInfos = createFoodInfos(menuItemNames, userLanguage, originLanguage);
     //환율 계산
     final List<PriceInfo> convertedPrices = convertCurrency(
         menuItems, originCurrency, userCurrency
@@ -56,6 +61,7 @@ public class ReconfigurationService {
 
     for (int i = 0; i < menuItems.size(); i++) {
       final ReconfigureResponse response = ReconfigureResponse.createResponse(
+          menuItemNames.get(i),
           foodInfos.get(i),
           translatedMenuNames.get(i),
           convertedPrices.get(i)
@@ -91,21 +97,18 @@ public class ReconfigurationService {
   }
 
   private List<FoodInfo> createFoodInfos(
-      final List<MenuItem> menuItems, final Language userLanguage, final Language originLanguage
+      final List<String> menuItemNames, final Language userLanguage, final Language originLanguage
   ) {
-    log.info("이미지 크롤링 시작");
-    //TODO: 번역 API 최적화 고민
-    final List<String> menuItemNames = menuItems.stream()
-        .map(MenuItem::name)
-        .map(name -> translationClient.translate(originLanguage, Language.ENGLISH, name))
+    final List<String> engMenuItemNames = menuItemNames.stream()
+        .map(name -> translationClient.translate(originLanguage, ENGLISH, name))
         .toList();
-    //TODO: 스크랩 최적화 고민
-    final List<FoodInfo> result = foodScraper.scrap(menuItemNames).stream()
+    log.info("이미지 크롤링 시작");
+    final List<FoodInfo> result = foodScraper.scrap(engMenuItemNames).stream()
         .map(foodInfo -> new FoodInfo(
             foodInfo.name(),
             foodInfo.image(),
             foodInfo.previewImage(),
-            translationClient.translate(Language.ENGLISH, userLanguage, foodInfo.description())
+            translationClient.translate(ENGLISH, userLanguage, foodInfo.description())
         )).toList();
     log.info("이미지 크롤링 끝");
     return result;
