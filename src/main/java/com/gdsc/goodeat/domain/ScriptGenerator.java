@@ -2,11 +2,11 @@ package com.gdsc.goodeat.domain;
 
 import static com.gdsc.goodeat.domain.Language.ENGLISH;
 import static java.lang.System.lineSeparator;
+import static java.util.stream.Collectors.joining;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,8 +27,8 @@ public class ScriptGenerator {
   private static String concatOrder(final List<OrderItem> orderItems) {
     return orderItems.stream()
         .map(orderItem -> String.format(ORDER_ITEM_FORMAT, orderItem.quantity(),
-            orderItem.originMenuName()))
-        .collect(Collectors.joining(lineSeparator()));
+            orderItem.userMenuName()))
+        .collect(joining(lineSeparator()));
   }
 
   /**
@@ -40,9 +40,9 @@ public class ScriptGenerator {
   public Script generate(
       final Language sourceLanguage, final Language targetLanguage, final List<OrderItem> orderItems
   ) {
-    final String concatOrders = concatOrder(orderItems);
-
     final String orderScriptPrefix = createOrderScriptPrefix(sourceLanguage);
+
+    final String concatOrders = concatOrder(orderItems);
 
     final String userScript = orderScriptPrefix + lineSeparator() + concatOrders;
     final String travelScript = translationClient.translate(
