@@ -2,7 +2,6 @@ package com.gdsc.goodeat.dto;
 
 import com.gdsc.goodeat.domain.CurrencyConverter.PriceInfo;
 import com.gdsc.goodeat.domain.FoodInfo;
-import com.gdsc.goodeat.domain.MenuItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -23,13 +22,14 @@ public class ReconfigureResponse {
   private final String userPriceWithCurrencyUnit;
 
   public static ReconfigureResponse createResponse(
-      final FoodInfo foodInfo, final String userMenuName, final PriceInfo priceInfo
+      final String originMenuName, final FoodInfo foodInfo,
+      final String userMenuName, final PriceInfo priceInfo
   ) {
     return new ReconfigureResponse(
         foodInfo.description(),
         foodInfo.previewImage(),
         foodInfo.image(),
-        foodInfo.name(),
+        originMenuName,
         userMenuName,
         priceInfo.getOriginPrice(),
         priceInfo.getOriginPriceWithCurrencyUnit(),
