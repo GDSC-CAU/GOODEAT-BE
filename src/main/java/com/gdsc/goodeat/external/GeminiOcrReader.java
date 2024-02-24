@@ -79,8 +79,8 @@ public class GeminiOcrReader implements OcrReader {
               "Please extract the name and price of the food from this menu image.\n"
                   + "Please print it out in JSON format\n"
                   + "[{"
-                  + "name: name of food (String)"
-                  + "price: price of food (double)"
+                  + "\"name\": name of food (String)"
+                  + "\"price\": price of food (double)"
                   + "}, ... ]"
           ));
       final String unicodeString = response.getCandidates(0).getContent().getParts(0).getText();
