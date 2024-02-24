@@ -37,8 +37,8 @@ public class ScriptApiTest extends ApiTest {
 
     //then
     final ScriptResponse expected = new ScriptResponse(
-        "Hello I want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả",
-        "Hello I want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 Bún Chả"
+        "Hello I want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 분짜",
+        "Hello I want to order" + TRANSLATION_POST_FIX + lineSeparator() + "3 분짜"
             + TRANSLATION_POST_FIX
     );
     final ScriptResponse actual = response.as(ScriptResponse.class);
