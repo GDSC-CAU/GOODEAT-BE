@@ -32,6 +32,7 @@ public class GeminiOcrReader implements OcrReader {
   private static final String LOCATION = "us-central1";
   private static final String MODEL_NAME = "gemini-pro-vision";
   private static final String SCOPE = "https://www.googleapis.com/auth/cloud-platform";
+  public static final String JSON_EXTRACT_PROMPT_MESSAGE = "Given a menu image, please extract and print the names and prices of the food items in JSON format. Follow the structure below for each item:\n\n[{\"name\": \"Name of the Food (String)\", \"price\": Price of the Food (double)}, ...]";
 
   private final GoogleCredentials credentials;
   private final ObjectMapper objectMapper;
@@ -76,12 +77,7 @@ public class GeminiOcrReader implements OcrReader {
       final GenerateContentResponse response = model.generateContent(
           ContentMaker.fromMultiModalData(
               PartMaker.fromMimeTypeAndData("image/jpeg", byteStringImage),
-              "Please extract the name and price of the food from this menu image.\n"
-                  + "Please print it out in JSON format\n"
-                  + "[{"
-                  + "\"name\": name of food (String)"
-                  + "\"price\": price of food (double)"
-                  + "}, ... ]"
+              JSON_EXTRACT_PROMPT_MESSAGE
           ));
       final String unicodeString = response.getCandidates(0).getContent().getParts(0).getText();
 
