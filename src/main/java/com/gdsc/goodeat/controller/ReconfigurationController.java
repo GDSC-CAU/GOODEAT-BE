@@ -2,6 +2,7 @@ package com.gdsc.goodeat.controller;
 
 import com.gdsc.goodeat.dto.ReconfigureRequest;
 import com.gdsc.goodeat.dto.ReconfigureResponse;
+import com.gdsc.goodeat.dto.UpdateJwtRequest;
 import com.gdsc.goodeat.service.ReconfigurationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,11 @@ public class ReconfigurationController {
   ) {
     final List<ReconfigureResponse> responses = reconfigurationService.reconfigure(request);
     return ResponseEntity.ok(responses);
+  }
+
+  @PostMapping("/update-jwt")
+  public ResponseEntity<Void> updateJwt(@RequestBody final UpdateJwtRequest request) {
+    reconfigurationService.updateJwt(request);
+    return ResponseEntity.ok().build();
   }
 }
