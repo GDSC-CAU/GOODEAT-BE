@@ -13,6 +13,8 @@ import com.gdsc.goodeat.domain.OcrReader;
 import com.gdsc.goodeat.domain.TranslationClient;
 import com.gdsc.goodeat.dto.ReconfigureRequest;
 import com.gdsc.goodeat.dto.ReconfigureResponse;
+import com.gdsc.goodeat.dto.UpdateJwtRequest;
+import com.gdsc.goodeat.external.UrlFoodScrapper;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -112,5 +114,11 @@ public class ReconfigurationService {
         )).toList();
     log.info("이미지 크롤링 끝");
     return result;
+  }
+
+  public void updateJwt(final UpdateJwtRequest request) {
+    final String token = request.getToken();
+    final UrlFoodScrapper urlFoodScrapper = (UrlFoodScrapper) foodScraper;
+    urlFoodScrapper.updateAuth(token);
   }
 }

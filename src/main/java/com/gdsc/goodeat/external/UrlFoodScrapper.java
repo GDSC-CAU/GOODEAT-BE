@@ -35,11 +35,11 @@ public class UrlFoodScrapper implements FoodScrapper {
   private static final String IMAGE_SELECTOR = "meta[property=og:image]";
   private static final String DESCRIPTION_SELECTOR = "meta[property=og:description]";
   private static final String FOOD_SEARCH_QUERY = "https://www.tasteatlas.com/api/v3/autocomplete?onlyRecipes=false&query=%s";
-  private static final String AUTH = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6InRhX3dlYiIsImVtYWlsIjoidGFfd2ViIiwibmFtZWlkIjoiMCIsInJvbGUiOiJ0YV93ZWIiLCJBbm9ueW1vdXMiOiJ0cnVlIiwiaXNzIjoidGFzdGVhdGxhcy5jb20iLCJhdWQiOiJ0YV93ZWIiLCJleHAiOjE3MDg1OTM4MzgsIm5iZiI6MTcwODU3MjIzOH0.2a7hH00Qn4r1-6TRGjjqu_B7TFsZO-RYqDA5BEyhev8";
 
   private final Map<String, FoodInfo> foodInfoCache = new ConcurrentHashMap<>();
   private final RestTemplate restTemplate = new RestTemplateBuilder().build();
   private final ObjectMapper objectMapper = new ObjectMapper();
+  private String auth = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6InRhX3dlYiIsImVtYWlsIjoidGFfd2ViIiwibmFtZWlkIjoiMCIsInJvbGUiOiJ0YV93ZWIiLCJBbm9ueW1vdXMiOiJ0cnVlIiwiaXNzIjoidGFzdGVhdGxhcy5jb20iLCJhdWQiOiJ0YV93ZWIiLCJleHAiOjE3MDg4MDE1MjIsIm5iZiI6MTcwODc3OTkyMn0.xcfqw10i3rGimJUIQe7plpmH5lW9ZlbqwCZj2MtbSCc";
 
   @Override
   public List<FoodInfo> scrap(final List<String> foodNames) {
@@ -120,9 +120,13 @@ public class UrlFoodScrapper implements FoodScrapper {
     final String searchQuery = String.format(FOOD_SEARCH_QUERY, replacedFoodName);
 
     final HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", AUTH);
+    headers.set("Authorization", auth);
     final HttpEntity<Object> entity = new HttpEntity<>(null, headers);
 
     return restTemplate.exchange(searchQuery, GET, entity, String.class);
+  }
+
+  public void updateAuth(final String auth) {
+    this.auth = auth;
   }
 }
