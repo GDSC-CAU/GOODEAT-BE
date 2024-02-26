@@ -25,7 +25,7 @@ public class ReconfigurationController {
     return ResponseEntity.ok(responses);
   }
 
-  @PostMapping("/reconfigure")
+  @PostMapping("/update-jwt")
   public ResponseEntity<Void> updateJwt(@RequestBody final UpdateJwtRequest request) {
     reconfigurationService.updateJwt(request);
     return ResponseEntity.ok().build();
